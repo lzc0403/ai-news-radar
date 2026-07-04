@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-04T16:31:50.314081Z",
+  "generated_at": "2026-07-04T18:04:02.476389Z",
   "sites": [
     {
       "site_id": "official_ai",
       "site_name": "Official AI Updates",
       "ok": true,
-      "item_count": 187,
-      "duration_ms": 7713,
+      "item_count": 156,
+      "duration_ms": 15417,
       "error": null
     },
     {
       "site_id": "aibreakfast",
       "site_name": "AI Breakfast",
       "ok": true,
-      "item_count": 9,
-      "duration_ms": 335,
+      "item_count": 7,
+      "duration_ms": 201,
       "error": null
     },
     {
@@ -22,7 +22,7 @@
       "site_name": "Follow Builders",
       "ok": true,
       "item_count": 39,
-      "duration_ms": 27,
+      "duration_ms": 52,
       "error": null
     },
     {
@@ -30,7 +30,7 @@
       "site_name": "TechURLs",
       "ok": true,
       "item_count": 405,
-      "duration_ms": 500,
+      "duration_ms": 445,
       "error": null
     },
     {
@@ -38,15 +38,15 @@
       "site_name": "Buzzing",
       "ok": true,
       "item_count": 744,
-      "duration_ms": 354,
+      "duration_ms": 340,
       "error": null
     },
     {
       "site_id": "iris",
       "site_name": "Info Flow",
       "ok": true,
-      "item_count": 344,
-      "duration_ms": 13400,
+      "item_count": 346,
+      "duration_ms": 13578,
       "error": null
     },
     {
@@ -54,23 +54,23 @@
       "site_name": "BestBlogs",
       "ok": true,
       "item_count": 1,
-      "duration_ms": 713,
+      "duration_ms": 569,
       "error": null
     },
     {
       "site_id": "tophub",
       "site_name": "TopHub",
       "ok": true,
-      "item_count": 3028,
-      "duration_ms": 1735,
+      "item_count": 3016,
+      "duration_ms": 1799,
       "error": null
     },
     {
       "site_id": "zeli",
       "site_name": "Zeli",
       "ok": true,
-      "item_count": 59,
-      "duration_ms": 495,
+      "item_count": 67,
+      "duration_ms": 395,
       "error": null
     },
     {
@@ -78,7 +78,7 @@
       "site_name": "AI HubToday",
       "ok": true,
       "item_count": 1,
-      "duration_ms": 398,
+      "duration_ms": 350,
       "error": null
     },
     {
@@ -86,7 +86,7 @@
       "site_name": "AIbase",
       "ok": true,
       "item_count": 20,
-      "duration_ms": 990,
+      "duration_ms": 1105,
       "error": null
     },
     {
@@ -94,7 +94,7 @@
       "site_name": "AI HOT",
       "ok": true,
       "item_count": 50,
-      "duration_ms": 4714,
+      "duration_ms": 1493,
       "error": null
     },
     {
@@ -102,21 +102,21 @@
       "site_name": "NewsNow",
       "ok": true,
       "item_count": 128,
-      "duration_ms": 503,
+      "duration_ms": 760,
       "error": null
     },
     {
       "site_id": "opmlrss",
       "site_name": "OPML RSS",
       "ok": true,
-      "partial_failures": 3,
-      "item_count": 124,
-      "duration_ms": 23504,
-      "error": "3 feeds failed",
+      "partial_failures": 2,
+      "item_count": 134,
+      "duration_ms": 7073,
+      "error": "2 feeds failed",
       "feed_count": 10,
       "effective_feed_count": 8,
-      "ok_feed_count": 7,
-      "failed_feed_count": 3,
+      "ok_feed_count": 8,
+      "failed_feed_count": 2,
       "skipped_feed_count": 2,
       "replaced_feed_count": 1
     }
@@ -124,18 +124,17 @@
   "successful_sites": 14,
   "failed_sites": [],
   "zero_item_sites": [],
-  "fetched_raw_items": 5139,
-  "items_before_topic_filter": 5641,
-  "items_in_24h": 478,
+  "fetched_raw_items": 5114,
+  "items_before_topic_filter": 5448,
+  "items_in_24h": 466,
   "rss_opml": {
     "enabled": true,
     "path": "configured",
     "feed_total": 10,
     "effective_feed_total": 8,
-    "ok_feeds": 5,
+    "ok_feeds": 6,
     "failed_feeds": [
       "https://rsshub.app/v2ex/topics/hot",
-      "https://cgw666.com/feed/",
       "https://rsshub.app/dapenti/tugua"
     ],
     "zero_item_feeds": [],
@@ -164,7 +163,7 @@
         "effective_feed_url": "https://www.ginonotes.com/feed.xml",
         "ok": true,
         "item_count": 87,
-        "duration_ms": 127,
+        "duration_ms": 223,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -178,7 +177,7 @@
         "effective_feed_url": "https://rsshub.app/v2ex/topics/hot",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 59,
+        "duration_ms": 73,
         "error": "403 Client Error: Forbidden for url: https://rsshub.app/v2ex/topics/hot",
         "skipped": false,
         "skip_reason": null,
@@ -190,10 +189,10 @@
         "feed_title": "吃瓜网",
         "feed_url": "https://cgw666.com/feed/",
         "effective_feed_url": "https://cgw666.com/feed/",
-        "ok": false,
-        "item_count": 0,
-        "duration_ms": 19261,
-        "error": "HTTPSConnectionPool(host='cgw666.com', port=443): Read timed out.",
+        "ok": true,
+        "item_count": 10,
+        "duration_ms": 1386,
+        "error": null,
         "skipped": false,
         "skip_reason": null,
         "replaced": false
@@ -206,7 +205,7 @@
         "effective_feed_url": "https://rsshub.app/dapenti/tugua",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 44,
+        "duration_ms": 72,
         "error": "403 Client Error: Forbidden for url: https://rsshub.app/dapenti/tugua",
         "skipped": false,
         "skip_reason": null,
@@ -220,7 +219,7 @@
         "effective_feed_url": "https://sspai.com/feed",
         "ok": true,
         "item_count": 10,
-        "duration_ms": 914,
+        "duration_ms": 1393,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -248,7 +247,7 @@
         "effective_feed_url": "https://www.iwb88.cc/feed/",
         "ok": true,
         "item_count": 10,
-        "duration_ms": 2440,
+        "duration_ms": 3023,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -262,7 +261,7 @@
         "effective_feed_url": "https://www.hacg.casa/wp/feed/",
         "ok": true,
         "item_count": 11,
-        "duration_ms": 397,
+        "duration_ms": 633,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -290,7 +289,7 @@
         "effective_feed_url": "http://feeds.feedburner.com/ruanyifeng",
         "ok": true,
         "item_count": 6,
-        "duration_ms": 262,
+        "duration_ms": 270,
         "error": null,
         "skipped": false,
         "skip_reason": null,
