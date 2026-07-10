@@ -3,525 +3,1081 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 内容雷达 — 昊哥知识库</title>
+<title>AI 内容雷达 · 工业粗野主义</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700;800&family=Archivo:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════════════
+   INDUSTRIAL BRUTALIST · AI CONTENT RADAR v3.3
+   Heavy concrete. Raw edges. No apologies.
+   ═══════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
 :root{
-  --bg:#020617;--surface:#0d1117;--border:#1e2a3a;--border-bright:#2d3d50;
-  --accent:#22C55E;--accent-dim:#16a34a;--text-primary:#f0f6fc;
-  --text-secondary:#8b949e;--text-muted:#4a5568;
-  --mono:'JetBrains Mono',monospace;--sans:'Inter',sans-serif;
+  --concrete:#1a1a1a;
+  --concrete-light:#2a2a2a;
+  --concrete-lighter:#333;
+  --steel:#444;
+  --girder:#555;
+  --rebar:#666;
+  --rivet:#888;
+  --paint:#c8c8c8;
+  --rust:#d44d2b;
+  --rust-dim:#b33d1f;
+  --amber:#e8a838;
+  --copper:#c97d3a;
+  --cyan:#38b8e8;
+  --cyan-dim:#2a8aaa;
+  --green:#3aa85b;
+  --white:#f0ece4;
+  --smoke:#d8d0c4;
+  --marker:#f5c842;
+  --font-display:'Archivo','Impact',sans-serif;
+  --font-sans:'Space Grotesk',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow:8px 8px 0 rgba(0,0,0,0.5);
+  --shadow-sm:4px 4px 0 rgba(0,0,0,0.4);
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text-primary);font-family:var(--mono);min-height:100vh;overflow-x:hidden}
 
-.header{border-bottom:2px solid var(--accent);padding:0 24px;background:var(--surface);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;height:56px}
-.header-left{display:flex;align-items:center;gap:12px}
-.header-logo{font-size:13px;font-weight:800;letter-spacing:0.15em;color:var(--accent);text-transform:uppercase}
-.header-sep{color:var(--border-bright)}
-.header-title{font-size:11px;color:var(--text-secondary);letter-spacing:0.1em;text-transform:uppercase}
-.header-right{display:flex;align-items:center;gap:16px;font-size:10px;color:var(--text-muted);letter-spacing:0.05em}
-.live-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+body{
+  background:var(--concrete);
+  color:var(--white);
+  font-family:var(--font-sans);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  background-image:repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px
+  );
+}
 
-.container{max-width:1400px;margin:0 auto;padding:24px}
+/* ─── CONCRETE TOP BAR ─── */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  background:var(--concrete);
+  border-bottom:4px solid var(--rust);
+  padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+.site-header-left{display:flex;align-items:center;gap:16px}
+.site-logo{
+  font-family:var(--font-display);
+  font-size:18px;font-weight:900;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--white);
+  background:var(--rust);
+  padding:6px 14px;
+  line-height:1;
+}
+.site-logo span{color:var(--white)}
+.site-header-sep{width:2px;height:28px;background:var(--steel)}
+.site-header-label{
+  font-size:11px;font-weight:600;
+  color:var(--rivet);
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+}
+.site-header-right{
+  display:flex;align-items:center;gap:20px;
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--rivet);
+}
+.live-dot{
+  width:10px;height:10px;
+  background:var(--rust);
+  animation:pulse 1.6s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.3}
+}
 
-.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:24px}
-.stat-block{background:var(--surface);padding:20px 24px;position:relative;overflow:hidden}
-.stat-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent)}
-.stat-block:nth-child(2)::before{background:#3B82F6}
-.stat-block:nth-child(3)::before{background:#F59E0B}
-.stat-block:nth-child(4)::before{background:#A78BFA}
-.stat-block:nth-child(5)::before{background:#EC4899}
-.stat-num{font-size:36px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
-.stat-num.accent{color:var(--accent)}
-.stat-label{font-size:10px;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:6px}
-.stat-sub{font-size:11px;color:var(--text-secondary);margin-top:4px}
+/* ─── CONTAINER ─── */
+.container{max-width:1440px;margin:0 auto;padding:32px}
 
-.main-grid{display:grid;grid-template-columns:440px 1fr;gap:24px;margin-bottom:24px}
+/* ─── HERO ─── */
+.hero{
+  border:3px solid var(--steel);
+  background:var(--concrete-light);
+  padding:40px 48px;
+  margin-bottom:40px;
+  position:relative;
+}
+.hero::before{
+  content:'';position:absolute;top:-3px;left:120px;
+  width:200px;height:3px;background:var(--rust);
+}
+.hero-tag{
+  display:inline-block;
+  font-family:var(--font-mono);
+  font-size:11px;font-weight:700;
+  color:#fff;background:var(--rust);
+  padding:4px 12px;
+  margin-bottom:16px;
+  letter-spacing:0.05em;
+}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:56px;font-weight:900;
+  line-height:1.05;
+  text-transform:uppercase;
+  color:var(--white);
+  letter-spacing:-0.02em;
+}
+.hero h1 .hl{color:var(--rust)}
+.hero p{
+  font-size:15px;
+  color:var(--smoke);
+  max-width:600px;
+  margin-top:16px;
+  line-height:1.6;
+}
+.hero-meta{
+  display:flex;align-items:center;gap:24px;
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--rivet);
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid var(--steel);
+}
+.hero-meta strong{color:var(--smoke);font-weight:600}
 
-.panel{background:var(--surface);border:1px solid var(--border)}
-.panel-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:rgba(34,197,94,0.03)}
-.panel-title{font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
-.panel-title::before{content:'//';color:var(--accent)}
-.panel-badge{font-size:10px;color:var(--accent);border:1px solid var(--accent-dim);padding:2px 8px;font-weight:700}
-.panel-body{padding:20px}
+/* ─── STATS BAND ─── */
+.stats-band{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  margin-bottom:40px;
+  border:3px solid var(--steel);
+  background:var(--concrete-light);
+}
+.stat-cell{
+  padding:24px;
+  text-align:center;
+  border-right:1px solid var(--steel);
+  position:relative;
+}
+.stat-cell:last-child{border-right:0}
+.stat-cell .num{
+  font-family:var(--font-display);
+  font-size:36px;font-weight:900;
+  color:var(--rust);
+  line-height:1;
+}
+.stat-cell .label{
+  font-size:11px;font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--rivet);
+  margin-top:6px;
+}
 
-.radar-wrap{display:flex;justify-content:center;align-items:center}
-.radar-wrap svg{width:100%;max-width:380px;height:auto}
+/* ─── SECTION HEADER ─── */
+.section-header{
+  display:flex;align-items:center;
+  margin-bottom:24px;
+  gap:12px;
+}
+.section-header h2{
+  font-family:var(--font-display);
+  font-size:22px;font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+  color:var(--white);
+  flex-shrink:0;
+}
+.section-header .bar{
+  flex:1;height:2px;background:var(--steel);
+}
 
-.cat-bars{display:flex;flex-direction:column;gap:12px}
-.cat-bar-item{display:grid;grid-template-columns:1fr 1fr 44px;align-items:center;gap:10px}
-.cat-bar-label{display:flex;align-items:center;gap:8px;min-width:0}
-.cat-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.cat-name{font-size:11px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cat-count{font-size:11px;font-weight:700;color:var(--text-primary);margin-left:auto;flex-shrink:0}
-.cat-bar-track{height:6px;background:var(--border);overflow:hidden}
-.cat-bar-fill{height:100%;transition:width 1s ease}
-.cat-pct{font-size:10px;color:var(--text-muted);text-align:right}
+/* ─── ALERT BANNER ─── */
+.alert-banner{
+  border:3px solid var(--amber);
+  background:rgba(232,168,56,0.08);
+  padding:20px 28px;
+  margin-bottom:40px;
+  display:flex;align-items:flex-start;gap:16px;
+}
+.alert-banner .icon{
+  font-size:24px;flex-shrink:0;margin-top:2px;
+}
+.alert-banner h3{
+  font-family:var(--font-display);
+  font-size:18px;font-weight:800;
+  color:var(--amber);
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.alert-banner p{
+  font-size:13px;color:var(--smoke);
+  line-height:1.6;
+}
 
-/* Trend Chart Panel */
-.trend-panel{margin-bottom:24px}
-.trend-panel .panel-body{padding:20px 20px 12px}
-.chart-container{position:relative;height:320px;width:100%}
+/* ─── TREND CARDS ─── */
+.trends-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-bottom:48px;
+}
+.trend-card{
+  border:3px solid var(--steel);
+  background:var(--concrete-light);
+  padding:0;
+  position:relative;
+  transition:border-color .2s, transform .15s;
+}
+.trend-card:hover{
+  border-color:var(--rust);
+  transform:translate(-2px,-2px);
+}
+.trend-card::after{
+  content:'';position:absolute;right:20px;top:20px;
+  width:8px;height:8px;
+  background:var(--steel);
+}
+.trend-card-header{
+  padding:20px 24px 16px;
+  border-bottom:2px solid var(--steel);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.trend-card-header .rank{
+  font-family:var(--font-mono);
+  font-size:13px;font-weight:700;
+  color:var(--rivet);
+}
+.trend-card-header .heat{
+  display:flex;align-items:center;gap:6px;
+  font-size:10px;text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--rivet);
+}
+.heat-dots{display:flex;gap:3px}
+.heat-dot{width:8px;height:8px;background:var(--steel)}
+.heat-dot.active{background:var(--rust)}
+.heat-dot.half{background:var(--copper)}
+.heat-dot.green{background:var(--green)}
 
-.filter-bar{display:flex;gap:8px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface);border:1px solid var(--border);margin-bottom:16px;align-items:center}
-.filter-label{font-size:10px;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-right:4px}
-.filter-btn{font-size:10px;font-family:var(--mono);padding:5px 12px;background:transparent;border:1px solid var(--border-bright);color:var(--text-secondary);cursor:pointer;transition:all .15s;letter-spacing:.05em;white-space:nowrap}
-.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
-.filter-btn.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700}
+.trend-card-title{
+  padding:16px 24px;
+  font-family:var(--font-display);
+  font-size:20px;font-weight:800;
+  text-transform:uppercase;
+  line-height:1.2;
+  color:var(--white);
+}
+.trend-card-title .hl-rust{color:var(--rust)}
+.trend-card-title .hl-amber{color:var(--amber)}
+.trend-card-title .hl-cyan{color:var(--cyan)}
 
-.search-wrap{margin-left:auto;position:relative}
-.search-input{background:var(--bg);border:1px solid var(--border-bright);color:var(--text-primary);font-family:var(--mono);font-size:11px;padding:5px 12px 5px 28px;width:200px;outline:none;transition:border-color .15s}
-.search-input:focus{border-color:var(--accent)}
-.search-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:11px}
+.trend-card-body{
+  padding:0 24px 20px;
+}
+.trend-card-body p{
+  font-size:13px;color:var(--smoke);
+  line-height:1.65;
+  margin-bottom:12px;
+}
+.trend-card-body .tldr{
+  background:rgba(212,77,43,0.1);
+  border-left:3px solid var(--rust);
+  padding:10px 14px;
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--smoke);
+  margin-bottom:14px;
+  line-height:1.55;
+}
 
-.articles-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
-.article-card{background:var(--surface);padding:16px 18px;cursor:pointer;transition:background .1s;position:relative;overflow:hidden}
-.article-card:hover{background:#111827}
-.article-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cat-color,var(--accent))}
-.article-cat-tag{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--cat-color,var(--accent));margin-bottom:6px;font-weight:700}
-.article-title{font-size:12px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.article-list{
+  list-style:none;
+  display:flex;flex-direction:column;gap:6px;
+}
+.article-list li{
+  font-size:12px;
+  color:var(--rivet);
+  padding:6px 10px;
+  background:rgba(0,0,0,0.25);
+  border:1px solid transparent;
+  transition:all .15s;
+  display:flex;align-items:center;gap:8px;
+}
+.article-list li::before{
+  content:'▸';
+  color:var(--rust);
+  font-size:10px;
+  flex-shrink:0;
+}
+.article-list li:hover{
+  border-color:var(--steel);
+  color:var(--smoke);
+}
+.article-list li .date{
+  font-family:var(--font-mono);
+  font-size:10px;
+  color:var(--rebar);
+  margin-left:auto;
+  flex-shrink:0;
+}
 
-/* Tag chips */
-.article-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
-.tag-chip{font-size:9px;padding:2px 7px;border-radius:3px;background:rgba(255,255,255,0.06);color:var(--text-secondary);border:1px solid var(--border-bright);font-family:var(--mono);letter-spacing:0.03em;white-space:nowrap}
+/* ─── HOT NEWS GRID ─── */
+.news-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:20px;
+  margin-bottom:48px;
+}
+.news-item{
+  border:2px solid var(--steel);
+  background:var(--concrete-light);
+  padding:16px 20px;
+  transition:border-color .2s;
+  position:relative;
+}
+.news-item:hover{
+  border-color:var(--amber);
+}
+.news-item .badge{
+  display:inline-block;
+  font-family:var(--font-mono);
+  font-size:9px;font-weight:600;
+  color:#fff;
+  padding:2px 8px;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.news-item .badge.hot{background:var(--rust)}
+.news-item .badge.new{background:var(--cyan-dim)}
+.news-item .badge.trend{background:var(--copper)}
+.news-item .badge.alert{background:var(--amber);color:#000}
+.news-item h3{
+  font-family:var(--font-sans);
+  font-size:14px;font-weight:600;
+  color:var(--white);
+  line-height:1.4;
+  margin-bottom:6px;
+}
+.news-item p{
+  font-size:12px;color:var(--rivet);
+  line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.news-item .meta{
+  font-family:var(--font-mono);
+  font-size:10px;color:var(--rebar);
+  margin-top:8px;
+  display:flex;align-items:center;gap:8px;
+}
 
-/* Article footer: id + time */
-.article-meta{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
-.article-id{font-size:9px;color:var(--text-muted)}
-.article-time{font-size:9px;color:var(--text-muted);letter-spacing:0.03em}
+/* ─── TRENDING TABLE ─── */
+.trending-table-wrap{
+  border:3px solid var(--steel);
+  margin-bottom:48px;
+  overflow-x:auto;
+  background:var(--concrete-light);
+}
+.trending-table{
+  width:100%;border-collapse:collapse;
+  font-size:12px;
+}
+.trending-table thead th{
+  font-family:var(--font-mono);
+  font-size:10px;font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  color:var(--rivet);
+  padding:12px 16px;
+  text-align:left;
+  border-bottom:2px solid var(--steel);
+  background:rgba(0,0,0,0.2);
+}
+.trending-table tbody td{
+  padding:10px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  color:var(--smoke);
+  vertical-align:top;
+}
+.trending-table tbody tr:hover{background:rgba(212,77,43,0.05)}
+.trending-table .td-title{max-width:380px}
+.trending-table .td-title a{
+  color:var(--white);text-decoration:none;
+  transition:color .15s;
+}
+.trending-table .td-title a:hover{color:var(--rust)}
+.trending-table .td-tag{
+  display:inline-block;
+  font-family:var(--font-mono);
+  font-size:9px;font-weight:600;
+  background:var(--steel);
+  color:var(--rivet);
+  padding:2px 8px;
+  text-transform:uppercase;
+}
+.trending-table .td-date{
+  font-family:var(--font-mono);
+  font-size:10px;color:var(--rebar);
+  white-space:nowrap;
+}
+.trending-table .td-rank{
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--rivet);
+}
 
-.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:20px;border-top:1px solid var(--border);background:var(--surface);border:1px solid var(--border);margin-top:16px}
-.page-btn{font-family:var(--mono);font-size:11px;padding:6px 14px;background:transparent;border:1px solid var(--border-bright);color:var(--text-secondary);cursor:pointer;transition:all .15s}
-.page-btn:hover,.page-btn.active{border-color:var(--accent);color:var(--accent)}
-.page-info{font-size:11px;color:var(--text-muted)}
+/* ─── FOOTER ─── */
+.site-footer{
+  border-top:4px solid var(--steel);
+  padding:24px 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--rebar);
+}
+.site-footer strong{color:var(--rivet)}
 
-.footer{border-top:1px solid var(--border);padding:16px 24px;font-size:10px;color:var(--text-muted);letter-spacing:.08em;display:flex;justify-content:space-between;align-items:center}
-.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted);font-size:12px;letter-spacing:.05em;background:var(--surface);border:1px solid var(--border);grid-column:1/-1}
-
-@media(max-width:768px){
-  .main-grid{grid-template-columns:1fr}
-  .stats-row{grid-template-columns:repeat(2,1fr)}
-  .container{padding:12px}
-  .chart-container{height:240px}
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){
+  .trends-grid{grid-template-columns:1fr}
+  .news-grid{grid-template-columns:1fr 1fr}
+  .stats-band{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:38px}
+}
+@media(max-width:640px){
+  .container{padding:16px}
+  .hero{padding:24px}
+  .hero h1{font-size:28px}
+  .news-grid{grid-template-columns:1fr}
+  .stats-band{grid-template-columns:1fr 1fr}
+  .stat-cell:nth-child(2){border-right:0}
+  .site-header{padding:0 16px}
+  .trending-table{font-size:11px}
 }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="header-left">
-    <div class="header-logo">AI RADAR</div>
-    <span class="header-sep">/</span>
-    <div class="header-title">昊哥知识库 · 内容扫描</div>
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="site-header-left">
+    <div class="site-logo">RADAR</div>
+    <div class="site-header-sep"></div>
+    <span class="site-header-label">AI Content Intelligence · IMA知识库</span>
   </div>
-  <div class="header-right">
+  <div class="site-header-right">
     <div class="live-dot"></div>
-    <span>UPDATED: 2026-06-04 12:30</span>
-    <span class="header-sep">|</span>
-    <span>IMA KNOWLEDGE BASE</span>
+    <span>LIVE</span>
+    <span>2026.07.10</span>
   </div>
 </header>
 
 <div class="container">
 
-  <div class="stats-row">
-    <div class="stat-block">
-      <div class="stat-num">301</div>
-      <div class="stat-label">AI ARTICLES</div>
-      <div class="stat-sub">知识库 AI 收录</div>
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-tag">RADAR v3.3 · INDUSTRIAL BRUTALIST</div>
+  <h1>
+    AI 内容<br>
+    <span class="hl">热力雷达</span>
+  </h1>
+  <p>基于 IMA 知识库沉淀 + 多渠道 Web 实时采集，自动提炼最新 AI 趋势、热点与高价值内容。原始数据驱动，无人工干预。</p>
+  <div class="hero-meta">
+    <span>📡 <strong>扫描范围</strong> 2026.05.11 – 2026.07.10</span>
+    <span>📦 <strong>采集来源</strong> 多渠道 Web + IMA KB</span>
+    <span>⚡ <strong>本期焦点</strong> WAIC 2026 · Hy3 正式版</span>
+  </div>
+</div>
+
+<!-- ═══ STATS BAND ═══ -->
+<div class="stats-band">
+  <div class="stat-cell">
+    <div class="num">10</div>
+    <div class="label">核心趋势</div>
+  </div>
+  <div class="stat-cell">
+    <div class="num">36</div>
+    <div class="label">热点条目</div>
+  </div>
+  <div class="stat-cell">
+    <div class="num">12</div>
+    <div class="label">热度精选</div>
+  </div>
+  <div class="stat-cell">
+    <div class="num" style="color:var(--amber)">4</div>
+    <div class="label">重磅爆款</div>
+  </div>
+</div>
+
+<!-- ═══ BREAKING ALERT ═══ -->
+<div class="alert-banner">
+  <div class="icon">⚠️</div>
+  <div>
+    <h3>WAIC 2026 开幕在即 · GPT-5.6 全球开放 · 腾讯混元 Hy3 正式版开源</h3>
+    <p>7月9日 OpenAI GPT-5.6 系列全球全面开放，Grok 4.5 同步向公众发布（SpaceXAI × Cursor 联合模型）。腾讯 7月6日发布混元 Hy3 正式版并开源 MoE 模型，重点强化 Agent 能力；美团 LongCat-2.0 开源。工信部就 AI 编程工具安全后门风险发布提示，阿里禁用 Claude 进入 48 小时倒计时。2026 世界人工智能大会（WAIC）暨 AI 全球治理高级别会议本月于上海召开。</p>
+  </div>
+</div>
+
+<!-- ═══ TRENDS ═══ -->
+<div class="section-header">
+  <h2>01 · 核心趋势</h2>
+  <div class="bar"></div>
+</div>
+
+<div class="trends-grid">
+
+  <!-- Trend 1: GPT-5.6 全球开放 & Grok 4.5 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#01</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div></div></div>
     </div>
-    <div class="stat-block">
-      <div class="stat-num accent">25</div>
-      <div class="stat-label">近 7 天新增</div>
-      <div class="stat-sub">本周活跃度</div>
+    <div class="trend-card-title">
+      GPT-5.6 全球开放 & Grok 4.5<br><span class="hl-rust">前沿模型军备白热化</span>
     </div>
-    <div class="stat-block">
-      <div class="stat-num">128</div>
-      <div class="stat-label">TOP CATEGORY</div>
-      <div class="stat-sub">AI Agent & 工作流</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">9</div>
-      <div class="stat-label">CATEGORIES</div>
-      <div class="stat-sub">分类覆盖</div>
-    </div>
-    <div class="stat-block">
-      <div class="stat-num">422</div>
-      <div class="stat-label">TOTAL ITEMS</div>
-      <div class="stat-sub">知识库条目总数</div>
+    <div class="trend-card-body">
+      <p>7月9日成为 AI 圈"大日子"：OpenAI GPT-5.6 系列全球全面开放，SpaceXAI Grok 4.5 同步向公众发布。SpaceXAI 与 Cursor 推出联合模型，SpaceX 以 600 亿美元收购 Cursor。Meta Muse Image 集成至 Instagram/WhatsApp，社交与 AI 加速融合。前沿模型从"参数竞赛"转向"生态卡位 + 分发入口"之战。</p>
+      <div class="tldr">GPT-5.6 全球开放。Grok 4.5 公开发布，SpaceX 600 亿收购 Cursor。前沿模型进入生态战。</div>
+      <ul class="article-list">
+        <li>OpenAI GPT-5.6 系列全球全面开放<span class="date">7/9</span></li>
+        <li>Grok 4.5 公开发布，SpaceXAI×Cursor 联合模型<span class="date">7/9</span></li>
+        <li>SpaceX 600 亿美元收购 Cursor<span class="date">7/9</span></li>
+        <li>Meta Muse Image 集成 Instagram/WhatsApp<span class="date">7/8</span></li>
+      </ul>
     </div>
   </div>
 
-  <div class="main-grid">
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">DISTRIBUTION RADAR</div>
-        <div class="panel-badge">TOP 6 CATS</div>
-      </div>
-      <div class="panel-body">
-        <div class="radar-wrap">
-          <svg viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-  <path d="M 220.0,167.2 L 265.7,193.6 L 265.7,246.4 L 220.0,272.8 L 174.3,246.4 L 174.3,193.6 Z" fill="none" stroke="#1a1a1a" stroke-width="1"/>
-<path d="M 220.0,114.4 L 311.5,167.2 L 311.5,272.8 L 220.0,325.6 L 128.5,272.8 L 128.5,167.2 Z" fill="none" stroke="#1a1a1a" stroke-width="1"/>
-<path d="M 220.0,60.0 L 358.6,140.0 L 358.6,300.0 L 220.0,380.0 L 81.4,300.0 L 81.4,140.0 Z" fill="none" stroke="#1a1a1a" stroke-width="1"/>
-<line x1="220" y1="220" x2="220.0" y2="60.0" stroke="#333" stroke-width="1"/>
-<text x="220.0" y="36.0" text-anchor="middle" dominant-baseline="middle" fill="#888" font-size="10" font-family="JetBrains Mono,monospace">Agent/工作流
-128</text>
-<line x1="220" y1="220" x2="358.6" y2="140.0" stroke="#333" stroke-width="1"/>
-<text x="379.3" y="128.0" text-anchor="middle" dominant-baseline="middle" fill="#888" font-size="10" font-family="JetBrains Mono,monospace">编程/开发
-80</text>
-<line x1="220" y1="220" x2="358.6" y2="300.0" stroke="#333" stroke-width="1"/>
-<text x="379.3" y="312.0" text-anchor="middle" dominant-baseline="middle" fill="#888" font-size="10" font-family="JetBrains Mono,monospace">资讯/其他
-46</text>
-<line x1="220" y1="220" x2="220.0" y2="380.0" stroke="#333" stroke-width="1"/>
-<text x="220.0" y="404.0" text-anchor="middle" dominant-baseline="middle" fill="#888" font-size="10" font-family="JetBrains Mono,monospace">模型/平台
-23</text>
-<line x1="220" y1="220" x2="81.4" y2="300.0" stroke="#333" stroke-width="1"/>
-<text x="60.7" y="312.0" text-anchor="middle" dominant-baseline="middle" fill="#888" font-size="10" font-family="JetBrains Mono,monospace">部署/运维
-7</text>
-<line x1="220" y1="220" x2="81.4" y2="140.0" stroke="#333" stroke-width="1"/>
-<text x="60.7" y="128.0" text-anchor="middle" dominant-baseline="middle" fill="#888" font-size="10" font-family="JetBrains Mono,monospace">应用/工具
-6</text>
-
-  <path d="M 220.0,60.0 L 306.6,170.0 L 269.8,248.8 L 220.0,248.8 L 212.4,224.4 L 213.5,216.2 Z" fill="#22C55E" fill-opacity="0.15" stroke="#22C55E" stroke-width="2" filter="url(#glow)"/>
-  <circle cx="220.0" cy="60.0" r="5" fill="#22C55E" filter="url(#glow)"/>
-<circle cx="306.6" cy="170.0" r="5" fill="#3B82F6" filter="url(#glow)"/>
-<circle cx="269.8" cy="248.8" r="5" fill="#A78BFA" filter="url(#glow)"/>
-<circle cx="220.0" cy="248.8" r="5" fill="#F59E0B" filter="url(#glow)"/>
-<circle cx="212.4" cy="224.4" r="5" fill="#EC4899" filter="url(#glow)"/>
-<circle cx="213.5" cy="216.2" r="5" fill="#14B8A6" filter="url(#glow)"/>
-</svg>
-        </div>
-      </div>
+  <!-- Trend 2: WAIC 2026 & AI 全球治理 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#02</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot"></div></div></div>
     </div>
-
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">CATEGORY BREAKDOWN</div>
-        <div class="panel-badge">301 TOTAL</div>
-      </div>
-      <div class="panel-body">
-        <div class="cat-bars">
-                  <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#22C55E"></span>
-            <span class="cat-name">AI Agent & 工作流</span>
-            <span class="cat-count">128</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:100%;background:#22C55E"></div>
-          </div>
-          <span class="cat-pct">42.5%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#3B82F6"></span>
-            <span class="cat-name">AI 编程 & 开发</span>
-            <span class="cat-count">80</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:62%;background:#3B82F6"></div>
-          </div>
-          <span class="cat-pct">26.6%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#A78BFA"></span>
-            <span class="cat-name">AI 资讯 & 其他</span>
-            <span class="cat-count">46</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:36%;background:#A78BFA"></div>
-          </div>
-          <span class="cat-pct">15.3%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#F59E0B"></span>
-            <span class="cat-name">AI 模型 & 平台</span>
-            <span class="cat-count">23</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:18%;background:#F59E0B"></div>
-          </div>
-          <span class="cat-pct">7.6%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#EC4899"></span>
-            <span class="cat-name">AI 部署 & 运维</span>
-            <span class="cat-count">7</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:5%;background:#EC4899"></div>
-          </div>
-          <span class="cat-pct">2.3%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#14B8A6"></span>
-            <span class="cat-name">AI 应用 & 工具</span>
-            <span class="cat-count">6</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:5%;background:#14B8A6"></div>
-          </div>
-          <span class="cat-pct">2.0%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#F97316"></span>
-            <span class="cat-name">AI 硬件 & 算力</span>
-            <span class="cat-count">5</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:4%;background:#F97316"></div>
-          </div>
-          <span class="cat-pct">1.7%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#EF4444"></span>
-            <span class="cat-name">AI 商业 & 趋势</span>
-            <span class="cat-count">4</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:3%;background:#EF4444"></div>
-          </div>
-          <span class="cat-pct">1.3%</span>
-        </div>
-        <div class="cat-bar-item">
-          <div class="cat-bar-label">
-            <span class="cat-dot" style="background:#8B5CF6"></span>
-            <span class="cat-name">AI 创作 & 生成</span>
-            <span class="cat-count">2</span>
-          </div>
-          <div class="cat-bar-track">
-            <div class="cat-bar-fill" style="width:2%;background:#8B5CF6"></div>
-          </div>
-          <span class="cat-pct">0.7%</span>
-        </div>
-        </div>
-      </div>
+    <div class="trend-card-title">
+      WAIC 2026 & AI 全球治理<br><span class="hl-amber">政策主场·万亿产业·十五五开局</span>
+    </div>
+    <div class="trend-card-body">
+      <p>2026 世界人工智能大会（WAIC）暨人工智能全球治理高级别会议本月于上海召开，国家发改委将带来重磅成果。7月7日上海发布会披露：去年我国人工智能相关产业规模超万亿，今年预计仍有 30% 以上增速。作为"十五五"开局之年，大模型、智能体、AI 芯片被列为核心布局方向，"智能体互联网""智能体安全"成大会焦点议题。</p>
+      <div class="tldr">WAIC 2026 上海开幕。AI 产业规模超万亿，今年增速 30%+。智能体互联网与安全成主场议题。</div>
+      <ul class="article-list">
+        <li>WAIC 2026 暨 AI 全球治理高级别会议召开<span class="date">7/7</span></li>
+        <li>我国 AI 产业规模超万亿，今年增速 30%+<span class="date">7/7</span></li>
+        <li>中国互联网大会：智能体互联网/安全五大论坛<span class="date">7/8</span></li>
+        <li>"十五五"开局：大模型/智能体/芯片核心布局<span class="date">7/7</span></li>
+      </ul>
     </div>
   </div>
 
-  <!-- Trend Chart Panel -->
-  <div class="trend-panel panel">
-    <div class="panel-header">
-      <div class="panel-title">WEEKLY TREND</div>
-      <div class="panel-badge">TOP 5 · 12 WEEKS</div>
+  <!-- Trend 3: 国产大模型开源潮 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#03</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div></div></div>
     </div>
-    <div class="panel-body">
-      <div class="chart-container">
-        <canvas id="trendChart"></canvas>
-      </div>
+    <div class="trend-card-title">
+      国产大模型开源潮<br><span class="hl-rust">混元Hy3·美团LongCat·性价比90%</span>
+    </div>
+    <div class="trend-card-body">
+      <p>腾讯 7月6日正式发布基座模型混元 Hy3（4月开源预览版的迭代），扩大后训练算力、提升数据质量，重点强化 Agent 能力，并开源 MoE 模型；美团大模型 LongCat-2.0 同步开源。中国 AI 大模型凭性价比在美国企业端调用占比持续攀升——部分模型比美国便宜约 90%。开源权重商业化成机构研判焦点。</p>
+      <div class="tldr">腾讯混元 Hy3 正式版发布并开源，强化 Agent。美团 LongCat-2.0 开源。国产模型性价比碾压，企业端调用攀升。</div>
+      <ul class="article-list">
+        <li>腾讯正式发布混元 Hy3，强化 Agent 能力<span class="date">7/6</span></li>
+        <li>美团大模型 LongCat-2.0 开源<span class="date">7/6</span></li>
+        <li>腾讯开源 Hy3 MoE 模型<span class="date">7/9</span></li>
+        <li>中国 AI 大模型比美国便宜约 90%<span class="date">7/5</span></li>
+      </ul>
     </div>
   </div>
 
-  <div class="articles-section">
-    <div class="filter-bar">
-      <span class="filter-label">FILTER:</span>
-      <button class="filter-btn active" data-cat="all">ALL (301)</button>
-<button class="filter-btn" data-cat="AI Agent & 工作流" style="--cat-color:#22C55E">Agent/工作流 (128)</button>
-<button class="filter-btn" data-cat="AI 编程 & 开发" style="--cat-color:#3B82F6">编程/开发 (80)</button>
-<button class="filter-btn" data-cat="AI 资讯 & 其他" style="--cat-color:#A78BFA">资讯/其他 (46)</button>
-<button class="filter-btn" data-cat="AI 模型 & 平台" style="--cat-color:#F59E0B">模型/平台 (23)</button>
-<button class="filter-btn" data-cat="AI 部署 & 运维" style="--cat-color:#EC4899">部署/运维 (7)</button>
-<button class="filter-btn" data-cat="AI 应用 & 工具" style="--cat-color:#14B8A6">应用/工具 (6)</button>
-<button class="filter-btn" data-cat="AI 硬件 & 算力" style="--cat-color:#F97316">硬件/算力 (5)</button>
-<button class="filter-btn" data-cat="AI 商业 & 趋势" style="--cat-color:#EF4444">商业/趋势 (4)</button>
-<button class="filter-btn" data-cat="AI 创作 & 生成" style="--cat-color:#8B5CF6">创作/生成 (2)</button>
-
-      <div class="search-wrap">
-        <span class="search-icon">⌕</span>
-        <input class="search-input" type="text" id="searchInput" placeholder="搜索标题...">
-      </div>
+  <!-- Trend 4: AI 编程监管 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#04</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot"></div></div></div>
     </div>
-    <div class="articles-grid" id="articlesGrid"></div>
-    <div class="pagination" id="pagination"></div>
+    <div class="trend-card-title">
+      AI 编程工具监管收紧<br><span class="hl-amber">后门风险提示·阿里禁 Claude 倒计时</span>
+    </div>
+    <div class="trend-card-body">
+      <p>工信部发布 AI 编程工具安全后门风险提示，直指 Claude Code 等海外工具供应链安全隐患。阿里禁用 Claude 进入 48 小时倒计时，国内 AI 编码工具替代窗口临近。北京经信局明确打造万卡算力集群、年内新增 7 万 P 智能算力，为国产 AI 编码生态提供底层支撑。监管与国产化双线推进。</p>
+      <div class="tldr">工信部提示 AI 编程工具后门风险。阿里禁用 Claude 48 小时倒计时。国产替代 + 算力自主双线推进。</div>
+      <ul class="article-list">
+        <li>工信部发布 AI 编程工具安全后门风险提示<span class="date">7/9</span></li>
+        <li>阿里禁用 Claude 进入 48 小时倒计时<span class="date">7/9</span></li>
+        <li>北京年内新增 7 万 P 智能算力/万卡集群<span class="date">7/8</span></li>
+        <li>国产 AI 编码工具迁移窗口临近<span class="date">7/9</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Trend 5: AI 硬件拐点 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#05</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot"></div></div></div>
+    </div>
+    <div class="trend-card-title">
+      AI 硬件普及拐点<br><span class="hl-rust">AI眼镜·AI手机超非AI·数百万亿Token</span>
+    </div>
+    <div class="trend-card-body">
+      <p>WAIC 发布会披露：今年 AI 手机、AI 电脑销量将首次超越非 AI 产品，日均 Token 调用量达数百万亿次，AI 原生办公智能体月访问量超 2000 万。国内成熟供应链推动 AI 眼镜价格下探至大众消费区间，2026 有望迎普及拐点——不追求全息显示，侧重"听觉+轻交互"。AI 从云端算力走向随身终端。</p>
+      <div class="tldr">AI 手机/电脑销量首超非 AI 产品。日均 Token 达数百万亿次。AI 眼镜价格下探，普及拐点将至。</div>
+      <ul class="article-list">
+        <li>今年 AI 手机/电脑销量首超非 AI 产品<span class="date">7/9</span></li>
+        <li>日均 Token 调用量达数百万亿次<span class="date">7/9</span></li>
+        <li>AI 眼镜价格下探，2026 普及拐点<span class="date">7/3</span></li>
+        <li>AI 原生办公智能体月访问超 2000 万<span class="date">7/9</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Trend 6: 人形机器人量产 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#06</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot"></div><div class="heat-dot"></div></div></div>
+    </div>
+    <div class="trend-card-title">
+      人形机器人量产提速<br><span class="hl-amber">整机 10 万台·宇树 IPO·具身智能</span>
+    </div>
+    <div class="trend-card-body">
+      <p>工信部在 WAIC 发布会表示：随着大模型、智能体、AI 芯片成熟，今年中国人形机器人整机产量有望突破 10 万台。宇树科技 IPO 注册生效，420 亿估值闪电过会。产业从 demo 演示进入交付阶段，"具身智能"成资本与政策共同押注的物理世界入口。3D 打印、桌面 CNC、AI 3D 大模型等配套赛道同步升温。</p>
+      <div class="tldr">今年人形机器人整机产量有望破 10 万台。宇树科技 IPO 生效。具身智能从 demo 走向交付。</div>
+      <ul class="article-list">
+        <li>工信部：今年人形机器人整机产量有望破 10 万台<span class="date">7/7</span></li>
+        <li>宇树科技 IPO 注册生效<span class="date">7/6</span></li>
+        <li>52 家公司融资 73 亿，AI 3D 大模型走热<span class="date">7/6</span></li>
+        <li>具身智能从演示进入交付阶段<span class="date">7/8</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Trend 7: Context Engineering -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#07</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot"></div><div class="heat-dot"></div></div></div>
+    </div>
+    <div class="trend-card-title">
+      Context Engineering 上下文工程<br><span class="hl-cyan">Agent 时代第一技能</span>
+    </div>
+    <div class="trend-card-body">
+      <p>Prompt Engineering 退居其次，Context Engineering（上下文工程）成为构建 AI Agent 最重要的技能：不再纠结单条提示词，而是动态组织模型每一轮看到的全部内容——系统指令、工具、记忆与状态。Anthropic 将其从 prompt engineering 明确区分，LangGraph、OpenAI 等框架推动"上下文 + 状态耐久化"落地。多轮 Agent 运行的核心，是持续维护和优化上下文配置。</p>
+      <div class="tldr">上下文工程 > 提示词工程。Agent 的核心是动态组织系统指令/工具/记忆/状态。状态耐久化成主流范式。</div>
+      <ul class="article-list">
+        <li>Context Engineering：构建 Agent 最重要技能<span class="date">7/6</span></li>
+        <li>Anthropic 把上下文工程从 prompt 工程区分<span class="date">6/28</span></li>
+        <li>LangGraph/OpenAI 推动上下文+状态耐久化<span class="date">5/25</span></li>
+        <li>有效的 Context 工程：多轮 Agent 精读<span class="date">6/22</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Trend 8: AI 视频 & 多模态 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#08</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot half"></div><div class="heat-dot"></div><div class="heat-dot"></div></div></div>
+    </div>
+    <div class="trend-card-title">
+      AI 视频 & 多模态融合<br><span class="hl-cyan">Muse Image·社交入口·Agent 生成</span>
+    </div>
+    <div class="trend-card-body">
+      <p>Meta 超级智能实验室推出 Muse Image 首款原生 Agent 图像模型，先多轮推理规划再生成，并集成至 Instagram/WhatsApp，把生成式 AI 塞进社交主流量入口。多模态从"生成一张图"走向"规划 + 执行"，图像/视频与社交分发深度绑定，成为大厂争夺 C 端注意力的新战场。</p>
+      <div class="tldr">Meta Muse Image：先推理规划再生成，接入 Instagram/WhatsApp。多模态与社交分发深度绑定。</div>
+      <ul class="article-list">
+        <li>Meta Muse Image 全面上线，社交+AI 融合<span class="date">7/8</span></li>
+        <li>Muse Image 集成 Instagram/WhatsApp<span class="date">7/8</span></li>
+        <li>多模态从"生成"走向"规划+执行"<span class="date">7/8</span></li>
+        <li>大厂争夺 C 端多模态注意力入口<span class="date">7/8</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Trend 9: AI 医疗制药 -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#09</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot half"></div><div class="heat-dot"></div><div class="heat-dot"></div></div></div>
+    </div>
+    <div class="trend-card-title">
+      AI 医疗全栈落地<br><span class="hl-rust">数智医学·临床赋能·新质生产力</span>
+    </div>
+    <div class="trend-card-body">
+      <p>7月3-5日 2026 数智医学大会（CHINC）在北京召开，聚焦 AI 临床落地与医疗数据治理。讯飞医疗展示全栈 AI 能力，以"四层创新"赋能医疗，主打 AI 临床应用与新质生产力。AI 从辅助诊断走向全流程临床赋能，医疗数据治理成为规模化落地的关键门槛。</p>
+      <div class="tldr">CHINC 数智医学大会聚焦 AI 临床落地。讯飞医疗全栈四层赋能。医疗数据治理成规模化关键。</div>
+      <ul class="article-list">
+        <li>2026 数智医学大会（CHINC）在京召开<span class="date">7/3</span></li>
+        <li>讯飞医疗全栈 AI 四层创新赋能医疗<span class="date">7/5</span></li>
+        <li>AI 临床落地 + 医疗数据治理成核心议题<span class="date">7/4</span></li>
+        <li>AI 从辅助诊断走向全流程赋能<span class="date">7/5</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Trend 10: C端生产力 AI -->
+  <div class="trend-card">
+    <div class="trend-card-header">
+      <span class="rank">#10</span>
+      <div class="heat"><span>热度</span><div class="heat-dots"><div class="heat-dot active"></div><div class="heat-dot active"></div><div class="heat-dot half"></div><div class="heat-dot"></div><div class="heat-dot"></div></div></div>
+    </div>
+    <div class="trend-card-title">
+      C 端生产力 AI 升级<br><span class="hl-amber">文心深度阅读·超级 App AI 化</span>
+    </div>
+    <div class="trend-card-body">
+      <p>7月1日文心一言 App 新增"深度阅读"与"图表生成"：上传百页行业报告或 PDF，数秒提取核心论点生成结构化脑图，自然语言直接生成可视化表格与图表。百度借大模型巩固 C 端 AI 搜索与办公助手入口。超级 App 竞相 AI 化，把大模型能力封装成"上传即用"的日常生产力，AI 从技术叙事走向大众工具。</p>
+      <div class="tldr">文心一言上线深度阅读+图表生成。超级 App 竞相 AI 化，大模型封装成日常生产力入口。</div>
+      <ul class="article-list">
+        <li>文心一言 App 上线深度阅读与图表生成<span class="date">7/1</span></li>
+        <li>百页 PDF 数秒生成结构化脑图<span class="date">7/1</span></li>
+        <li>百度巩固 C 端 AI 搜索/办公入口<span class="date">7/1</span></li>
+        <li>超级 App AI 化成 C 端主战场<span class="date">7/3</span></li>
+      </ul>
+    </div>
   </div>
 
 </div>
 
-<footer class="footer">
-  <span>// AI CONTENT RADAR · HERMES AUTOMATION · 2026-06-04 12:30</span>
-  <span>SOURCE: IMA KNOWLEDGE BASE · 301 AI ARTICLES · 422 TOTAL</span>
+<!-- ═══ HOT NEWS ═══ -->
+<div class="section-header">
+  <h2>02 · 热点直击</h2>
+  <div class="bar"></div>
+</div>
+
+<div class="news-grid">
+
+  <div class="news-item">
+    <div class="badge hot">🔥 爆款</div>
+    <h3>GPT-5.6 系列 7/9 全球全面开放</h3>
+    <p>OpenAI 官宣 GPT-5.6 全球放开，同日 SpaceXAI Grok 4.5 向公众发布。7月9日被业内称为 AI 圈又一个"大日子"。</p>
+    <div class="meta"><span>7/9</span><span>· 模型</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge hot">🔥 爆款</div>
+    <h3>腾讯发布混元 Hy3 正式版并开源</h3>
+    <p>7月6日腾讯正式发布基座模型混元 Hy3，扩大后训练算力、提升数据质量与多样性，重点强化 Agent 能力，同步开源 MoE 模型。</p>
+    <div class="meta"><span>7/6</span><span>· 模型</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge hot">🔥 爆款</div>
+    <h3>工信部提示 AI 编程工具后门风险</h3>
+    <p>工信部就 AI 编程工具安全后门风险发布提示，直指 Claude Code 等海外工具供应链隐患。阿里禁用 Claude 进入 48 小时倒计时。</p>
+    <div class="meta"><span>7/9</span><span>· 监管</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge hot">🔥 爆款</div>
+    <h3>SpaceX 600 亿美元收购 Cursor</h3>
+    <p>SpaceXAI 与 Cursor 推出联合模型，SpaceX 以 600 亿美元收购 Cursor AI 编辑器，前沿模型与编码入口深度绑定。</p>
+    <div class="meta"><span>7/9</span><span>· 融资</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge new">🆕 新锐</div>
+    <h3>美团 LongCat-2.0 开源</h3>
+    <p>美团大模型 LongCat-2.0 开源，国产开源阵营再添一员。开源权重商业化趋势成机构最新研判焦点。</p>
+    <div class="meta"><span>7/6</span><span>· 开源</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge new">🆕 新锐</div>
+    <h3>Meta Muse Image：先推理再生成</h3>
+    <p>Meta 超级智能实验室推出首款原生 Agent 图像模型，多轮推理规划后输出，已集成 Instagram/WhatsApp，社交+AI 加速融合。</p>
+    <div class="meta"><span>7/8</span><span>· 多模态</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge new">🆕 新锐</div>
+    <h3>文心一言上线深度阅读+图表生成</h3>
+    <p>百页 PDF 数秒提取核心论点生成脑图，自然语言直接生成可视化表格图表。百度巩固 C 端 AI 搜索与办公入口。</p>
+    <div class="meta"><span>7/1</span><span>· 产品</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge hot">🔥 爆款</div>
+    <h3>AI 手机/电脑销量今年首超非 AI</h3>
+    <p>WAIC 发布会披露：日均 Token 调用量达数百万亿次，AI 原生办公智能体月访问超 2000 万。AI 硬件迎普及拐点。</p>
+    <div class="meta"><span>7/9</span><span>· 硬件</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge trend">📈 趋势</div>
+    <h3>工信部：人形机器人整机产量破 10 万</h3>
+    <p>WAIC 发布会表示今年中国人形机器人整机产量有望突破 10 万台。宇树科技 IPO 注册生效，具身智能进入交付阶段。</p>
+    <div class="meta"><span>7/7</span><span>· 具身</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge trend">📈 趋势</div>
+    <h3>WAIC 2026 暨 AI 全球治理会议召开</h3>
+    <p>世界人工智能大会本月于上海举办，国家发改委带来重磅成果。我国 AI 产业规模超万亿，今年增速预计 30% 以上。</p>
+    <div class="meta"><span>7/7</span><span>· 政策</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge new">🆕 新锐</div>
+    <h3>中国大模型比美国便宜约 90%</h3>
+    <p>中国 AI 大模型凭性价比在美国企业端调用占比持续攀升。亚洲 AI 交易从领涨转向平仓，机构研判开源权重商业化。</p>
+    <div class="meta"><span>7/5</span><span>· 市场</span></div>
+  </div>
+
+  <div class="news-item">
+    <div class="badge trend">📈 趋势</div>
+    <h3>Context Engineering 成 Agent 第一技能</h3>
+    <p>上下文工程取代提示词工程：动态组织系统指令/工具/记忆/状态。Anthropic 明确区分，框架推动状态耐久化落地。</p>
+    <div class="meta"><span>7/6</span><span>· 范式</span></div>
+  </div>
+
+</div>
+
+<!-- ═══ TRENDING TABLE ═══ -->
+<div class="section-header">
+  <h2>03 · 完整文章清单</h2>
+  <div class="bar"></div>
+</div>
+
+<div class="trending-table-wrap">
+  <table class="trending-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>标题</th>
+        <th>分类</th>
+        <th>日期</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="td-rank">1</td>
+        <td class="td-title"><a href="#">OpenAI GPT-5.6 系列 7/9 全球全面开放</a></td>
+        <td><span class="td-tag">模型</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">2</td>
+        <td class="td-title"><a href="#">SpaceXAI Grok 4.5 向公众发布，×Cursor 联合模型</a></td>
+        <td><span class="td-tag">模型</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">3</td>
+        <td class="td-title"><a href="#">腾讯正式发布混元 Hy3 并开源 MoE 模型</a></td>
+        <td><span class="td-tag">模型</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">4</td>
+        <td class="td-title"><a href="#">美团大模型 LongCat-2.0 开源</a></td>
+        <td><span class="td-tag">开源</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">5</td>
+        <td class="td-title"><a href="#">工信部发布 AI 编程工具安全后门风险提示</a></td>
+        <td><span class="td-tag">监管</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">6</td>
+        <td class="td-title"><a href="#">阿里禁用 Claude 进入 48 小时倒计时</a></td>
+        <td><span class="td-tag">监管</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">7</td>
+        <td class="td-title"><a href="#">SpaceX 600 亿美元收购 Cursor AI 编辑器</a></td>
+        <td><span class="td-tag">融资</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">8</td>
+        <td class="td-title"><a href="#">Meta Muse Image 全面上线，集成 Instagram/WhatsApp</a></td>
+        <td><span class="td-tag">多模态</span></td>
+        <td class="td-date">7/8</td>
+      </tr>
+      <tr>
+        <td class="td-rank">9</td>
+        <td class="td-title"><a href="#">WAIC 2026 暨 AI 全球治理高级别会议召开</a></td>
+        <td><span class="td-tag">政策</span></td>
+        <td class="td-date">7/7</td>
+      </tr>
+      <tr>
+        <td class="td-rank">10</td>
+        <td class="td-title"><a href="#">工信部：今年人形机器人整机产量有望破 10 万台</a></td>
+        <td><span class="td-tag">具身</span></td>
+        <td class="td-date">7/7</td>
+      </tr>
+      <tr>
+        <td class="td-rank">11</td>
+        <td class="td-title"><a href="#">我国 AI 产业规模超万亿，今年增速预计 30%+</a></td>
+        <td><span class="td-tag">市场</span></td>
+        <td class="td-date">7/7</td>
+      </tr>
+      <tr>
+        <td class="td-rank">12</td>
+        <td class="td-title"><a href="#">今年 AI 手机/电脑销量将首超非 AI 产品</a></td>
+        <td><span class="td-tag">硬件</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">13</td>
+        <td class="td-title"><a href="#">日均 Token 调用量达数百万亿次</a></td>
+        <td><span class="td-tag">市场</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">14</td>
+        <td class="td-title"><a href="#">文心一言 App 上线深度阅读与图表生成</a></td>
+        <td><span class="td-tag">产品</span></td>
+        <td class="td-date">7/1</td>
+      </tr>
+      <tr>
+        <td class="td-rank">15</td>
+        <td class="td-title"><a href="#">宇树科技 IPO 注册生效，闪电过会</a></td>
+        <td><span class="td-tag">融资</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">16</td>
+        <td class="td-title"><a href="#">中国 AI 大模型比美国便宜约 90%</a></td>
+        <td><span class="td-tag">市场</span></td>
+        <td class="td-date">7/5</td>
+      </tr>
+      <tr>
+        <td class="td-rank">17</td>
+        <td class="td-title"><a href="#">Context Engineering 成构建 Agent 第一技能</a></td>
+        <td><span class="td-tag">范式</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">18</td>
+        <td class="td-title"><a href="#">2026 数智医学大会（CHINC）在京召开</a></td>
+        <td><span class="td-tag">医疗</span></td>
+        <td class="td-date">7/3</td>
+      </tr>
+      <tr>
+        <td class="td-rank">19</td>
+        <td class="td-title"><a href="#">讯飞医疗全栈 AI 四层创新赋能医疗</a></td>
+        <td><span class="td-tag">医疗</span></td>
+        <td class="td-date">7/5</td>
+      </tr>
+      <tr>
+        <td class="td-rank">20</td>
+        <td class="td-title"><a href="#">腾讯减持快手，持股比例降至 9.37%</a></td>
+        <td><span class="td-tag">公司</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">21</td>
+        <td class="td-title"><a href="#">AI 眼镜价格下探，2026 有望迎普及拐点</a></td>
+        <td><span class="td-tag">硬件</span></td>
+        <td class="td-date">7/3</td>
+      </tr>
+      <tr>
+        <td class="td-rank">22</td>
+        <td class="td-title"><a href="#">AI 原生办公智能体月访问量超 2000 万</a></td>
+        <td><span class="td-tag">产品</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">23</td>
+        <td class="td-title"><a href="#">中国互联网大会：智能体互联网/安全五大论坛</a></td>
+        <td><span class="td-tag">政策</span></td>
+        <td class="td-date">7/8</td>
+      </tr>
+      <tr>
+        <td class="td-rank">24</td>
+        <td class="td-title"><a href="#">开源权重商业化成机构最新研判焦点</a></td>
+        <td><span class="td-tag">市场</span></td>
+        <td class="td-date">7/5</td>
+      </tr>
+      <tr>
+        <td class="td-rank">25</td>
+        <td class="td-title"><a href="#">社交+AI 融合：Muse Image 塞进主流量入口</a></td>
+        <td><span class="td-tag">多模态</span></td>
+        <td class="td-date">7/8</td>
+      </tr>
+      <tr>
+        <td class="td-rank">26</td>
+        <td class="td-title"><a href="#">Anthropic 将上下文工程从提示词工程区分</a></td>
+        <td><span class="td-tag">范式</span></td>
+        <td class="td-date">6/28</td>
+      </tr>
+      <tr>
+        <td class="td-rank">27</td>
+        <td class="td-title"><a href="#">LangGraph/OpenAI 推动上下文+状态耐久化</a></td>
+        <td><span class="td-tag">Agent</span></td>
+        <td class="td-date">5/25</td>
+      </tr>
+      <tr>
+        <td class="td-rank">28</td>
+        <td class="td-title"><a href="#">北京年内新增 7 万 P 智能算力/万卡集群</a></td>
+        <td><span class="td-tag">基建</span></td>
+        <td class="td-date">7/8</td>
+      </tr>
+      <tr>
+        <td class="td-rank">29</td>
+        <td class="td-title"><a href="#">52 家公司融资 73 亿，AI 3D 大模型走热</a></td>
+        <td><span class="td-tag">融资</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">30</td>
+        <td class="td-title"><a href="#">具身智能从 demo 演示进入交付阶段</a></td>
+        <td><span class="td-tag">具身</span></td>
+        <td class="td-date">7/8</td>
+      </tr>
+      <tr>
+        <td class="td-rank">31</td>
+        <td class="td-title"><a href="#">混元 Hy3 强化 Agent，较预览版全面提升</a></td>
+        <td><span class="td-tag">模型</span></td>
+        <td class="td-date">7/6</td>
+      </tr>
+      <tr>
+        <td class="td-rank">32</td>
+        <td class="td-title"><a href="#">26 年 AI 圈前沿全景：从军备竞赛到价值落地</a></td>
+        <td><span class="td-tag">趋势</span></td>
+        <td class="td-date">7/3</td>
+      </tr>
+      <tr>
+        <td class="td-rank">33</td>
+        <td class="td-title"><a href="#">Momenta 自动驾驶新进展登上 AI 日报</a></td>
+        <td><span class="td-tag">具身</span></td>
+        <td class="td-date">7/9</td>
+      </tr>
+      <tr>
+        <td class="td-rank">34</td>
+        <td class="td-title"><a href="#">百度借大模型巩固 C 端 AI 搜索/办公入口</a></td>
+        <td><span class="td-tag">产品</span></td>
+        <td class="td-date">7/1</td>
+      </tr>
+      <tr>
+        <td class="td-rank">35</td>
+        <td class="td-title"><a href="#">超级 App AI 化成 C 端主战场</a></td>
+        <td><span class="td-tag">趋势</span></td>
+        <td class="td-date">7/3</td>
+      </tr>
+      <tr>
+        <td class="td-rank">36</td>
+        <td class="td-title"><a href="#">亚洲 AI 交易从领涨转向平仓</a></td>
+        <td><span class="td-tag">市场</span></td>
+        <td class="td-date">7/5</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div><strong>AI 内容雷达</strong> · IMA知识库 + Web 多渠道</div>
+  <div>Generated <strong>2026.07.10 10:55</strong> · 数据源 多渠道 Web Search + IMA Knowledge Base</div>
 </footer>
 
-<script>
-const ARTICLES = [{"id": 0, "title": "Codex终于能用国产模型了！保姆级教程来！多图预警!", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_12fd243c70ba5a3e78dd3ec3efa9776b", "tags": ["国产模型"], "update_time": ""}, {"id": 1, "title": "别再让你的 AI 单打独斗了，这才是团队真正需要的 Agent 系统", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d38ff2cc18c8c117d02fc8e6ebcb7c2a", "tags": ["Agent"], "update_time": ""}, {"id": 2, "title": "万万没想到，美团龙猫也有被老外爆吹的一天｜开源视频模型、口播数字人、本地部署全搞定", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b35386f08af038173231b262d2d3842c", "tags": ["开源", "开源视频", "模型", "本地部署"], "update_time": ""}, {"id": 3, "title": "付费文章也能抓！这个 Skill 帮你把任何内容喂给 NotebookLM", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_17ae80d4f08fabba37aad9fbe053a324", "tags": ["Skill", "NotebookLM"], "update_time": ""}, {"id": 4, "title": "CLI-Switch：Agent 调用 Claude Code / Codex 的正确姿势", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_711ed1ee13de30c91017dc7b380959ff", "tags": ["Agent", "Claude", "CLI", "Switch", "Code"], "update_time": ""}, {"id": 5, "title": "想做自媒体的都来用，这个免费skill可以帮你少走很多选题弯路", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5d7772593675502c58ebbf5d36da3d1d", "tags": [], "update_time": ""}, {"id": 6, "title": "微软悄然开源了一款 Skill 神器", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_12aac7f7612f712d139a04e9be870c88", "tags": ["开源", "Skill"], "update_time": ""}, {"id": 7, "title": "人才+1，有人把申请专利也做成了skill，知识产权的普及度再次增加", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3963961a78f64c9c72e0521caa9c7c05", "tags": [], "update_time": ""}, {"id": 8, "title": "【保姆级教程】Codex 国内也能畅快用，亲测有效", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_83063f5043d916f10b6136e987d8d1d6", "tags": ["Codex"], "update_time": ""}, {"id": 9, "title": "Codex 用久了又笨又卡？两个skill 专治这个", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8fa1c28cae996d6183f7f856412379b6", "tags": ["Codex"], "update_time": ""}, {"id": 10, "title": "达尔文.skill 2.0正式开源发布！让你的所有skill左脚踩右脚实现自我进化", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_ac6c3b06af1dead1aedd6b9fad530763", "tags": ["开源", "skill"], "update_time": ""}, {"id": 11, "title": "GitHub这个最新项目，建议所有AI作者都试试", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a8a7846e7893b13f7d2c2a5628e4d036", "tags": ["GitHub"], "update_time": ""}, {"id": 12, "title": "别再为 Claude 付费！Codex + 免费模型 + cc-switch，多场景 AI 编程全搞定", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_284506c393feae812db6b1fed1dbb7dc", "tags": ["Claude", "免费模型", "Codex", "switch"], "update_time": ""}, {"id": 13, "title": "iPhone 跑 AI 生图只要 9 秒！浏览器里也能跑，这个 0.93GB 模型太离谱了", "category": "AI 创作 & 生成", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_12ded4c1f3b028625b93f4444d4f98e5", "tags": ["模型太离", "iPhone"], "update_time": ""}, {"id": 14, "title": "让Codex无限进步！Agent版X来了～", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_edb04e8569e925c72948e6b10c1336ee", "tags": ["Agent"], "update_time": ""}, {"id": 15, "title": "开源个 Skill｜彻底解决小红、小绿书配图难题", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7141d426cf8526b33507528d597b90e2", "tags": ["开源", "Skill"], "update_time": ""}, {"id": 16, "title": "别再折腾 cc-switch 了，Codex 可以这样配中转站，更优解", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1d65f2c5ecb24b481c56d5215c6f76bb", "tags": ["switch", "Codex"], "update_time": ""}, {"id": 17, "title": "全网最详细的Codex安装、无账号使用Codex、Codex接deepseek、设置Codex中文、解锁Codex的skills功能教程", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e1fcbd5e981d41816c2e248b5b2d4648", "tags": ["DeepSeek"], "update_time": ""}, {"id": 18, "title": "是时候把我养了100天的Agent拿出来测个MBTI和职业优势测试了！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f57da13adcd03f58a1795216a46eea0d", "tags": ["Agent"], "update_time": ""}, {"id": 19, "title": "爆肝两周，我把 Codex 最全实战指南开源了", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_76315bb53d53a7345f24e9bdc7cec8c7", "tags": ["开源", "Codex"], "update_time": ""}, {"id": 20, "title": "这个开源项目，把 AI生图的水印干掉了", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_58997237e5c9e017ef3b5c16845abda4", "tags": ["开源"], "update_time": ""}, {"id": 21, "title": "花园开源4个神级Skills：做视频、写网页、生成图、查知识库，一篇讲完怎么用", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_14a61f15bb3100b2715cb62da79dc8ce", "tags": ["开源", "做视频", "生成图"], "update_time": ""}, {"id": 22, "title": "从0到1带你速通Codex，我整理的终极保姆教程来了。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_11dfd4332481a26756024d41bb01df36", "tags": [], "update_time": ""}, {"id": 23, "title": "Codex 认证太折磨？这个 Chrome 扩展一键搞定，连电话验证都能跳过", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3f41419ba3516a2df50635b838fe66ee", "tags": ["Codex", "Chrome"], "update_time": ""}, {"id": 24, "title": "OpenClaw向量模型配置指南：云端白嫖 vs 本地部署，保姆级教程", "category": "AI 部署 & 运维", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4ac63de569bfcd374c1ca51ac04692c5", "tags": ["向量模型", "云端白嫖", "本地部署"], "update_time": ""}, {"id": 25, "title": "MiniCPM5-1B 开源！一个能跑在手机上的 AI 桌宠来了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4bb576b8b57fed05045c9ea91db00ffc", "tags": ["开源", "MiniCPM5"], "update_time": ""}, {"id": 26, "title": "Leader 说 Skills 就是 Prompt 换皮，我不信，花一周做了个能自动过验证码的浏览器自动化 Skill，结果他偷偷给我绩效打了 A", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3c2076c48c7569d0b174a301b606a84b", "tags": ["Prompt", "器自动化", "Leader", "Skills", "Skill"], "update_time": ""}, {"id": 27, "title": "免费！DeepSeek-V4-Pro薅羊毛指南", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f01f93cc17268227aca0b6b67b5092e1", "tags": ["DeepSeek"], "update_time": ""}, {"id": 28, "title": "深刻分享一个AI云产品创意", "category": "AI 商业 & 趋势", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_309a3956cd832df2fcfe2e1547de77df", "tags": ["云产品创"], "update_time": ""}, {"id": 29, "title": "“Token”必须死？", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2f39a8b9fc73aafb816aeeb82d4ba881", "tags": ["Token"], "update_time": ""}, {"id": 30, "title": "用 Codex 优化网速狂飙 900Mbps？实测之后我发现了新的隐藏玩法", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_37235faf9ffe84a9338245fef01089f5", "tags": ["Codex"], "update_time": ""}, {"id": 31, "title": "太牛了！codex也能优化网络了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5cc44e3172f32ad9afb31a025d5cf8f6", "tags": ["网络了"], "update_time": ""}, {"id": 32, "title": "国产模型API接到Codex之后，还能跑通这10个核心玩法", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b0152235033065503754542c25f67b37", "tags": ["国产模型"], "update_time": ""}, {"id": 33, "title": "挖到个巨省Token的开源Agent，还能以复利的方式变现（企业、开发者必看）！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8880f812b40d8ef0ce2d831db2a21b15", "tags": ["Agent", "开源", "Token"], "update_time": ""}, {"id": 34, "title": "开源一个 Skill，让 AI 接管你屏幕边那张便签纸", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3ccf08dc2e0576b1cc5dac5ae2ab3ce3", "tags": ["开源", "Skill"], "update_time": ""}, {"id": 35, "title": "通过Sub2API共享富哥的Claude Code订阅", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4c163618eefd6c4a63ac2ccee5650eb1", "tags": ["Claude"], "update_time": ""}, {"id": 36, "title": "不可思议！一行命令竟能同时管理10个GPT账号，还能实时监控额度", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1ea18810a69126960a0bbb4cf29db3d2", "tags": ["GPT"], "update_time": ""}, {"id": 37, "title": "3.9元搞定Codex！国内也能畅用～（附教程，超简单）", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b3fcf8d0cc481c8e0cf023742ee74d3e", "tags": [], "update_time": ""}, {"id": 38, "title": "Codex登录太麻烦，试试这个小技巧", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_741253919f59289ec432fc3580e4beba", "tags": [], "update_time": ""}, {"id": 39, "title": "全网免费Token汇总；还有最后7天！小米还有一万亿token没发完，", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b6e0e2c269a94b052f9a79b979ee1207", "tags": ["Token"], "update_time": ""}, {"id": 40, "title": "这个 Skill 提前实现了微信聊天的 AI 能力", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6a9ae025b5cccee414dc6250f6d2e7fe", "tags": ["Skill"], "update_time": ""}, {"id": 41, "title": "告别大模型迷信：这个开源框架让 8B 小模型在 Agent 任务上干翻 Sonnet", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e8b57f4eaff5be608b0b7b1187eaa689", "tags": ["Agent", "大模型", "小模型", "开源", "框架让"], "update_time": ""}, {"id": 42, "title": "帮大家总结了一下凌晨的Google I/O 2026开发者大会。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8c4cd5bbd8b39bbe1e0e559f89f13fe1", "tags": ["Google"], "update_time": ""}, {"id": 43, "title": "10万 stars，146个专业AI专家，12个完整部门， 一条命令，全部装进你的智能体！", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_02d8aae3160b06e593bb8a2ff0e7ffda", "tags": ["你的智能", "stars"], "update_time": ""}, {"id": 44, "title": "每月省一千，我雇了支 7×24 云端 Agent 团队", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3a5f39f8f401f93bcaa6a98552f9def4", "tags": ["Agent", "云端"], "update_time": ""}, {"id": 45, "title": "某厂大模型（两个字）启动离职脱敏，核心成员需要强制签署，想离职必须提前3个月同步公司。", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4e45dc2c13504b9ae98634a171aef50d", "tags": ["大模型"], "update_time": ""}, {"id": 46, "title": "手把手教你用 Sub2API 搭一个自己的 AI Token 中转站", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_290d9f8d4d72c1bb228d4f565d846e29", "tags": ["Token", "Sub2API"], "update_time": ""}, {"id": 47, "title": "软著申请从此不花钱，顺便还能咸鱼接单赚钱，这两个AI Skill太香了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9405e77029dbf5e8dbd18bebf64a81c4", "tags": [], "update_time": ""}, {"id": 48, "title": "这个 GitHub 上 1.6 万人点赞 AI PPT 工具，生成的 PPT 能编辑。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b0824900b9e829b943d479c9f27812cf", "tags": ["GitHub", "生成的", "PPT"], "update_time": ""}, {"id": 49, "title": "NVIDIA官方平台免费调用大模型，无需每天重置！", "category": "AI 硬件 & 算力", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_cbde6b370a95563a6a25b5bec221be28", "tags": ["NVIDIA", "大模型"], "update_time": ""}, {"id": 50, "title": "腾讯云 Hermes Agent 镜像配置多 NVIDIA key 实现 first-full 快速响应", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f4b9560e87838443773a6ab7cbc918ab", "tags": ["Agent", "NVIDIA", "腾讯云", "Hermes", "key"], "update_time": ""}, {"id": 51, "title": "告别命令行：Hermes Desktop 让你的Hermes Agent助手走进桌面", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_dc8c8c4e21ffc1f0457705ed8b8c4fb4", "tags": ["Agent", "Hermes", "Desktop"], "update_time": ""}, {"id": 52, "title": "一篇教你从0搭建中转站！超高性价比 token 自由", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7f9b478f1b2b44a3753c7d3029ed9225", "tags": ["Token"], "update_time": ""}, {"id": 53, "title": "以后做 PPT 我都丢给 Agent 了，顺便测了下国产模型能不能扛", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6a8aa9452d7516304b48a1b60a67f782", "tags": ["Agent", "PPT"], "update_time": ""}, {"id": 54, "title": "开源「伯乐Skill」，让你和Agent同时进化成AI热点懂王！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6ee7b39b0d57b454c69252da8dcd70df", "tags": ["Agent", "开源"], "update_time": ""}, {"id": 55, "title": "全球最大的 AI 灰产，水到底有多深？", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7c3953d4c0a13f3aa63883c41f2bd4ad", "tags": [], "update_time": ""}, {"id": 56, "title": "终于找到解决手机消息轰炸的 AI 神器，有点离谱...", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_42b839d3db41887c2255f0f7201fb9cc", "tags": [], "update_time": ""}, {"id": 57, "title": "免费 Claude Opus 4.7 先用起来，再看 GPT Plus/Pro 半价和 4 年 Business 免费机会", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a7f89dca2115bb6e354d397a462dd22e", "tags": ["GPT", "Claude", "Opus", "Plus", "Pro"], "update_time": ""}, {"id": 58, "title": "5分钟把一个博主的公众号文章，做成了自己的 AI 知识库！", "category": "AI 应用 & 工具", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_004f829cce0daca4a500c29e4e5e3e91", "tags": [], "update_time": ""}, {"id": 59, "title": "codex搭配 HyperFrames (HeyGen) 或 Remotion 生成视频优秀创意赏析", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_80eaf236e950e545747aed1cb0cc47ce", "tags": ["生成视频", "HyperFrames", "HeyGen", "Remotion"], "update_time": ""}, {"id": 60, "title": "装了这个AI热点Skill之后，你再也不需要自己去刷AI新闻了。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_851c79d48769d089474cac42e3e9588c", "tags": [], "update_time": ""}, {"id": 61, "title": "从零生成一份教程包：主题到高质量教程包的完整工作流", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d92524582b75c2680831c820d2dfc3bc", "tags": ["从零生成"], "update_time": ""}, {"id": 62, "title": "12 天 4.2K 的 Star，我的 GPT-image2 开源项目火了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_548e4e963e1bb5b74066c9c59bcfcf98", "tags": ["GPT", "开源", "Star", "image2"], "update_time": ""}, {"id": 63, "title": "给 Claude 装上排版引擎！Kami 让 AI 输出的文档秒变精致 PDF，自带高级感", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a3bed3c5899df48fba16c7c73637083b", "tags": ["Claude", "引擎", "Kami", "PDF"], "update_time": ""}, {"id": 64, "title": "白嫖LLM不是梦：2026免费LLM API资源清单+避坑指南", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3ebfbecdffec635e466800386a0f4324", "tags": ["LLM"], "update_time": ""}, {"id": 65, "title": "这个封装了我3年自媒体经验的AI热点网站，今天向所有人免费开放。", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_75f9e2e3a218a23d31ebccdc5f91467d", "tags": [], "update_time": ""}, {"id": 66, "title": "我试了几乎所有能生成 PPT 的 AI 技能，最后只留了 4 个，特别是最后一个", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f70561d6368e9be4f791003b6e6bd2d5", "tags": ["生成", "PPT"], "update_time": ""}, {"id": 67, "title": "一招教你免费将DeepSeek、Qwen、Kimi、GLM等主流ai大模型网页转换成本地api任意调用 彻底实现token自由!", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_03fb9ed31b6733e95cca4d0a83522124", "tags": ["DeepSeek", "Qwen", "Kimi", "大模型", "Token"], "update_time": ""}, {"id": 68, "title": "Web Access：一个Skill，拉满Agent联网和浏览器能力", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0768ba7743031c0423895bb232f90af1", "tags": ["Agent", "Web", "Access"], "update_time": ""}, {"id": 69, "title": "又一个神级 skill 开源  !  好用很多。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0a39f067eb6cf0896deb52e1372776a2", "tags": ["开源", "skill"], "update_time": ""}, {"id": 70, "title": "AI做PPT的正确姿势：不是一键生成，而是分14步提案", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6d6d046b8c16cb08ccc4c04adbf74f84", "tags": ["生成"], "update_time": ""}, {"id": 71, "title": "开源「淘金小镇.Skill」,让你的Agent挖出每个排行榜里隐藏的信息差！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2adef20c0f8b6df0d584719286b76453", "tags": ["Agent", "开源", "Skill"], "update_time": ""}, {"id": 72, "title": "4万Star开源神作曝光顶级AI们的System Prompt！太有意思了～", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_acc7c841c8b862a62b72de9126d376e8", "tags": ["Prompt", "开源", "System Prompt"], "update_time": ""}, {"id": 73, "title": "每轮对话都在重复为历史买单：Agent 成本优化的四个设计原则", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_78cd0b48533a8e9379dfbe293811c067", "tags": ["Agent"], "update_time": ""}, {"id": 74, "title": "self-improving-agent：一份 Markdown 如何让 AI 学会自我进化", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_72a9a73763e625a6a4c90e3cc9a54715", "tags": ["Agent", "self", "improving", "Markdown"], "update_time": ""}, {"id": 75, "title": "懂王Skill：Agent和你都能懂的自进化AI日报", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e31734a257ecd68c6e660dcc80c6bd1f", "tags": ["Agent"], "update_time": ""}, {"id": 76, "title": "腾讯混元干了件大事：Skill Graphs", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6e4cbadab92616fe9018a541d362cdba", "tags": ["Skill", "Graphs"], "update_time": ""}, {"id": 77, "title": "一句话生成 1920px 高清架构图，7 种风格随时切，这三个 「Claude Code」 Skill 装了就卸不掉了。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_afe514fd8323210059d3bed0105f9839", "tags": ["Claude", "Code", "Skill"], "update_time": ""}, {"id": 78, "title": "最值得推荐的20个宝藏Skills，小众但真香", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_913de678bc1663668f0824c46354f22b", "tags": [], "update_time": ""}, {"id": 79, "title": "五一期间刷GitHub停不下来：第三个项目千行代码做出自进化Agent", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fa41edf19503bcfb26096ff3a8b3b4f2", "tags": ["Agent", "GitHub"], "update_time": ""}, {"id": 80, "title": "本地大模型不踩雷，这个开源检测工具火了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fba74a46fd64dd3c2d134c6cd77530d4", "tags": ["大模型", "开源"], "update_time": ""}, {"id": 81, "title": "\"ChatGPT免费的team怎么来的？\"是奥特曼的钓鱼执法，还是技术极客的狂欢？", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3da94cb2958b9d45408daabc1dd91cb6", "tags": ["GPT", "ChatGPT"], "update_time": ""}, {"id": 82, "title": "DeepSeek vs Claude vs GLM 横测三轮，我每天用的还是第四个", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0edd05037ad0ecdee19ae6b094e3ce1d", "tags": ["Claude", "DeepSeek", "GLM"], "update_time": ""}, {"id": 83, "title": "自建中转站，每天烧掉1亿token实现GPT-5.4自由", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_ca311546a625d9db6942681925bd9544", "tags": ["GPT", "Token"], "update_time": ""}, {"id": 84, "title": "为电脑上的所有 Agent，统一一套 Skill 库", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_109f8b8542755bd90c7094b90fbda95c", "tags": ["Agent", "Skill"], "update_time": ""}, {"id": 85, "title": "开源\"免费 API 永动机\"，聚合 14 家白嫖额度，单月 13 亿 Token 随便造", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_580826ac0e724b2fe1b346ed324c719f", "tags": ["开源", "Token", "API"], "update_time": ""}, {"id": 86, "title": "不写代码如何榨干模型 token plan 价值？", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3399acfdb76075016b21ce2b8eb4108f", "tags": ["Token", "模型", "plan"], "update_time": ""}, {"id": 87, "title": "来，立刻拥有你的私人AI图片风格影像馆", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_47b964af8049649bc79ba9175b7c067e", "tags": [], "update_time": ""}, {"id": 88, "title": "今天，给这个image2提示词大佬出篇个人专辑", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7ac9045333cf8487a2cfbe2a8c075508", "tags": [], "update_time": ""}, {"id": 89, "title": "GPT Plus 白嫖新姿势：GoPay 印尼流完整攻略（附实操）", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9213a8ab46e26aaf3a26b3e3b24a3b6a", "tags": ["GPT", "Plus", "GoPay"], "update_time": ""}, {"id": 90, "title": "开源「洁癖.skill」，让你的Agent越用越聪明。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_02e3945b1c124cb9e00f5f878a876456", "tags": ["Agent", "开源", "skill"], "update_time": ""}, {"id": 91, "title": "当我们在讨论 Harness 的时候，我们在讨论什么 | 深度对谈: MiniMax × Hermes Agent", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1585934d2ae12b40148ef5d34b573c04", "tags": ["Agent", "Harness", "MiniMax", "Hermes"], "update_time": ""}, {"id": 92, "title": "GPT Image2 很强，但 OpenClaw 不能生图？这个 Skill 解决了！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6c4d44ed40a22b988f87e511221b4426", "tags": ["GPT", "Image2", "OpenClaw", "Skill"], "update_time": ""}, {"id": 93, "title": "5个Claude神级Skill：第3个让我每天多睡1h", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7dfa12d3428aa9d1fddee477d74c721a", "tags": ["Claude"], "update_time": ""}, {"id": 94, "title": "8.8k星星！开源的211个专家级Agent，一键接入，一个人就是一个团队", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0b1265c2524fe19a52aba703be64df12", "tags": ["Agent", "开源"], "update_time": ""}, {"id": 95, "title": "推荐搞 Agent 的把这个 4 万 Star 的 GitHub 项目研究透。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7012b87302fc86a4d2e6e33376448b80", "tags": ["Agent", "GitHub", "推荐搞", "Star"], "update_time": ""}, {"id": 96, "title": "白嫖14家AI服务商！每月13亿tokens免费额度，这个开源项目太离谱了", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4f53c8f57fd802c05d022360306e6ddc", "tags": ["开源", "Token"], "update_time": ""}, {"id": 97, "title": "月入百万的 AI中转站，钱到底从哪来？", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a6d869e6bede70f660f2ee15ef558cef", "tags": [], "update_time": ""}, {"id": 98, "title": "告别\"图片PPT\"：这个5.6k Star的开源工具，让AI生成真正可编辑的PowerPoint", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d851f213eed4cb51823fa8f37a817f63", "tags": ["开源", "生成真正"], "update_time": ""}, {"id": 99, "title": "网易又一次走在了前面：给你的OpenClaw、Hermes 配一个专属工作邮箱", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fc59df83974e7ffcd097a6b3223e6de4", "tags": ["Hermes"], "update_time": ""}, {"id": 100, "title": "我逆向了 329 条 GPT-Image2 提示词模板，全部开源！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_88b39fdcc34251d9fcdfb2f839409be8", "tags": ["GPT", "开源", "Image2"], "update_time": ""}, {"id": 101, "title": "8个技能，拆出一条AI写作流水线", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a958ff8c3c6c23ff8884060d8a38df6d", "tags": [], "update_time": ""}, {"id": 102, "title": "这个 AI 浏览器，简直就是小红书、公众号运营神器。", "category": "AI 应用 & 工具", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0e939f53354d60af05df2dec25134ec0", "tags": [], "update_time": ""}, {"id": 103, "title": "开源一个 PPT Skill｜压进了我 10 年的设计经验", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f944d3ec8a9732893858c44ffc2829c5", "tags": ["开源", "PPT", "Skill"], "update_time": ""}, {"id": 104, "title": "分享6个我觉得应该必装的Skills。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6754609cee004da0b0805835b22e0baf", "tags": [], "update_time": ""}, {"id": 105, "title": "AI 专用浏览器，比 Chrome 快 11 倍，内存仅 1/9!", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8ef8be3e3a8a79ffc18a7f6fb9087842", "tags": ["Chrome"], "update_time": ""}, {"id": 106, "title": "Openclaw养龙虾秘籍大公开！【安全+省钱】", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_df2c2311ed0a132cbd1a225859e1ad29", "tags": [], "update_time": ""}, {"id": 107, "title": "我挖到了Kimi K2.6+Hermes的六个神技巧，这下多Agent 24h组队干活真成了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9e10c074fe3fbb7e216f978dc6628a35", "tags": ["Agent", "Kimi"], "update_time": ""}, {"id": 108, "title": "我把 Claude Design 做成了 Skill，人人都能成为顶级网站设计师", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_c54225b75b6328ec2bd5e4354151eab7", "tags": ["Claude", "Design", "Skill"], "update_time": ""}, {"id": 109, "title": "（可能全网最全/长的）Hermes Agent+K2.6 保姆教程 + 实战案例", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_809351ad51479317643090d52948a117", "tags": ["Agent", "Hermes", "Agent+K2"], "update_time": ""}, {"id": 110, "title": "本地大模型不踩雷，这个开源检测工具火了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d269906ef70d8b1bb5403a05f01dc14c", "tags": ["大模型", "开源"], "update_time": ""}, {"id": 111, "title": "gpt image2提示词汇总", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_cbc25aca14ed2f0d898edfa3e7004adc", "tags": ["GPT"], "update_time": ""}, {"id": 112, "title": "我逆向了Claude Design！免费开源！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0f70b6d1ed2aed949201844686474e0d", "tags": ["Claude", "开源", "Design"], "update_time": ""}, {"id": 113, "title": "无限调用！5分钟带你打造专属 Gemini 生成图片、视频 API，可用 NanoBananaPro、NanoBanana2", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f1759b9acf677b141c2b308029008d50", "tags": ["Gemini", "生成图片", "视频", "API", "NanoBananaPro"], "update_time": ""}, {"id": 114, "title": "Skill 的机会不在单点，在编排：一种你可能还没想过的架构能力", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a4a2666a6736fd5806f9d2b5667d7c56", "tags": ["Skill"], "update_time": ""}, {"id": 115, "title": "一句话生成PPT，已经能用了：html-ppt-skill实测指南", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_147d4d97c12834609275910fecd3842f", "tags": ["html", "ppt"], "update_time": ""}, {"id": 116, "title": "零 API Key 做视频！这个开源神器，把 AI 助手变成视频工作室！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b5692a86c1f4258a5b78afbdaef7043a", "tags": ["开源", "做视频", "视频工作", "API", "Key"], "update_time": ""}, {"id": 117, "title": "开源Turix，你可以把任何App当Agent Skill用！比如微信...", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b6f56c60a535bbd0572ecd4984ff5875", "tags": ["Agent", "开源"], "update_time": ""}, {"id": 118, "title": "GPT Image 2 提示词图库开源站点来了", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_53ad3ad8fe8610558841f318bfc6cffd", "tags": ["GPT", "开源", "Image"], "update_time": ""}, {"id": 119, "title": "最值得安装的20个Skills", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fb4ebf75e158346f40155bbd522b2583", "tags": [], "update_time": ""}, {"id": 120, "title": "搞定Flow2API，免费畅用谷歌Nano Banana 2 和Veo 3.1", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0814d25b2d288acff320fe69cee1e359", "tags": ["Banana"], "update_time": ""}, {"id": 121, "title": "Claude国内不让用，3分钟赶紧免费备用全球顶尖CodeX", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_015efcde5002be75ade3a4226eda2e2a", "tags": ["Claude"], "update_time": ""}, {"id": 122, "title": "Claude最不想让你用的天才设计系统，被人改造成了开源skill", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e9cf02c0e735b6d50e4cc389c178d054", "tags": ["Claude", "开源"], "update_time": ""}, {"id": 123, "title": "搞完 Hermes 多 Agent 我才发现，这根本不是技术活，是管理活", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8942b502e0619882b359d54d1d0c6698", "tags": ["Agent", "Hermes"], "update_time": ""}, {"id": 124, "title": "10天破3800星 ！又一个画图skill开源了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5005ed6659a25e8f18bf23417b3da59f", "tags": ["开源"], "update_time": ""}, {"id": 125, "title": "从0开始，在国内用上Claude Code的终极保姆教程来了。", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e6ed9257787a9bdca5f5649084e402cc", "tags": ["Claude"], "update_time": ""}, {"id": 126, "title": "Claude Design 提示词泄露 这五处最值得抄...", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2d9e61e3097695c95faff9e26c228a1b", "tags": ["Claude", "Design"], "update_time": ""}, {"id": 127, "title": "实测丨HeyGen开源HyperFrames，让AI Agent用HTML做视频", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_ecd4d152b3ca11017105a70da565682e", "tags": ["Agent", "开源", "做视频"], "update_time": ""}, {"id": 128, "title": "暴击设计行业的 Claude Design ，系统提示词在 GitHub 上泄露了。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0f84402b09a55de37f42e1704c3d8b4c", "tags": ["Claude", "GitHub", "Design"], "update_time": ""}, {"id": 129, "title": "Claude Design完整系统提示词泄露！", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4863178378b2f434901ddd4e6834c1ff", "tags": ["Claude"], "update_time": ""}, {"id": 130, "title": "一段Prompt，砍掉LLM73%的废话", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_dbf6b4a6eb3342484c153c1f47834d5e", "tags": ["LLM", "Prompt"], "update_time": ""}, {"id": 131, "title": "Skill深度测评：13000+，筛出5个生产级工具", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0ef7438a554f017f0c32b028067f0aaa", "tags": [], "update_time": ""}, {"id": 132, "title": "终于！AI Agent闭环已被打通：胜算云与CC Switch等四款开源实用开源项目达成深度合作~", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_09e2cf83d95d3365ff018041f062eb9c", "tags": ["Agent", "开源", "胜算云与"], "update_time": ""}, {"id": 133, "title": "这才是我想要的Hermes Web UI（强烈推荐）", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d4956bbb0acd028c0dfc20ad4fd244b9", "tags": ["强烈推荐", "Web"], "update_time": ""}, {"id": 134, "title": "给大家推荐一个超级有趣的项目：TokenArena，Token消耗竞技场！", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_deb47bd4a93c7b91bf5c838793a77550", "tags": ["Token", "TokenArena"], "update_time": ""}, {"id": 135, "title": "Hermes 这个技能我一直没碰，跑完一遍后悔没早试", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_49950bfc5b02f51158905b0b3069f07a", "tags": ["Hermes"], "update_time": ""}, {"id": 136, "title": "这个 skill 火了：一周下载 18.7 万次，真有点猛！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a14d635998ee3a3d2a2140b6e6addec6", "tags": ["skill"], "update_time": ""}, {"id": 137, "title": "Hermes Agent 全平台部署及使用全指南——Linux、macOS、WSL2（Win）、Termux", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_58240561e38a27d8e14c65eecd79132d", "tags": ["Agent", "Hermes", "Linux", "macOS", "WSL2"], "update_time": ""}, {"id": 138, "title": "HeyGen 发布这个 hyperframes CLI 很强啊跟我之前的一个想法类似，就是它把用纯 HTML 写的那个动效变成视频。然后再接一个（比如 Seedance 2.0 这样的）模型。这样你就可以纯零人工介入，实现人脸出镜的那种科普视频了。比如我发布一个小东西，想讲一下这些功能，我就可以一张照片扔上去，剩下的全交给 Claude Code 搞完。而且它支持 GSAP、Lottie、CSS、Three.js 这种框架去生成视频的效果。理论上你可以拿这套东西构建出任何主流的 AE 特效模板。它支持完整的视频渲染管线，包括获取、编码、音频混合，还有一个编辑器的 UI 界面，你可以手动在这个界面里编辑。这个比原来的 Remotion 完整和强大了非常多，推荐你如果用原来 Remotion 做视频，可以换到这个框架了详情：github.com/heygen-com/hyperframes", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_cd58a16d1357291f3faf5b3429a55df5", "tags": ["Claude", "GitHub", "视频", "模型", "这种框架"], "update_time": ""}, {"id": 139, "title": "开源「仓颉.Skill」，你现在可以蒸馏任何书！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b3a6a14a58f640da6a6607cdb1e29c3c", "tags": ["开源", "Skill"], "update_time": ""}, {"id": 140, "title": "我做了个 Skill：6 个场景，解决内容创作 90% 的问题", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_402448bf2f4f1aaff329a8c445a16040", "tags": ["Skill"], "update_time": ""}, {"id": 141, "title": "单篇100万阅读文章，如何用AI 做好内容创作？", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0669ab4df70163649ba9f013376f1077", "tags": [], "update_time": ""}, {"id": 142, "title": "继 GLM-5.1 / Qwen3.6 Plus 之后：第三个国产顶级模型无限量白嫖攻略来了", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_73a7d1a90214bddf2fbef0f36bcf98d9", "tags": ["Qwen", "GLM", "Qwen3", "Plus"], "update_time": ""}, {"id": 143, "title": "为什么到处都有人在卖 Token？以及如何 0 成本搭建你自己的 AI 中转站", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_417d1b785a80a5243cffa661350ba803", "tags": ["Token"], "update_time": ""}, {"id": 144, "title": "卸载龙虾后，我找到了更香的爱马仕Agent，5 分钟带你极速上手", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b0145b0f607af15e8596c1018b92744a", "tags": ["Agent"], "update_time": ""}, {"id": 145, "title": "我做了个 Skill：让 AI 帮你生成 Logo 和图标", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_14e925b18c96da8db4d0e3609638b67d", "tags": ["帮你生成", "Skill", "Logo"], "update_time": ""}, {"id": 146, "title": "卡兹克写作风格Skill+Karpathy LLM Wiki ：构建能自我进化的文章写作知识库", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3758cccc0df61939456c3e85540646a0", "tags": ["LLM", "Karpathy", "Wiki"], "update_time": ""}, {"id": 147, "title": "给你的AI Agent装个控制台，Hermes 最好用的Web UI同时也是颜值最高的", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_74f9051da2f7e77f172db87c491c8272", "tags": ["Agent", "Hermes"], "update_time": ""}, {"id": 148, "title": "Claude Code/Codex/OpenCode 成本神器诞生，Token 节省 80%！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0b234e7f111f8dd04b3e3ab6e9ce5840", "tags": ["Claude", "Token", "Code", "Codex", "OpenCode"], "update_time": ""}, {"id": 149, "title": "花叔不公开的写作 Skill，我逆向出来了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_46e342e4884e79fea65f91ef4fa8a061", "tags": ["Skill"], "update_time": ""}, {"id": 150, "title": "我花了两天,把那个会自学的 Hermes Agent 跑通了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_524236d5dc0c398a490c43caf268728c", "tags": ["Agent", "Hermes"], "update_time": ""}, {"id": 151, "title": "免费不限token用量，1分钟接入全球最强的开源模型GLM-5.1", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4cfe11c21055ea6ac5ee9ca8d3956add", "tags": ["开源", "Token"], "update_time": ""}, {"id": 152, "title": "分享一个我用了2年的深度研究Prompt，半小时帮你搞懂任何陌生领域。", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_ee331b67d188932113d5f43409027dd5", "tags": ["Prompt"], "update_time": ""}, {"id": 153, "title": "达尔文.skill正式发布，一个无限进化的skill系统！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f557397fa8b4a416cd5fb493c7ff4133", "tags": [], "update_time": ""}, {"id": 154, "title": "又一个神级 Skill，开源了！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7281e7f1206371a7016399bbd305031e", "tags": ["开源", "Skill"], "update_time": ""}, {"id": 155, "title": "这个 Skill 太硬了，刚开源就斩获 2.8K 星标！Agent 联网能力拉满！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_ea43da60c460a7f0ef15081d4057f427", "tags": ["Agent", "开源", "Skill"], "update_time": ""}, {"id": 156, "title": "达尔文系统实操指南：给Skill打个分，让AI自己优化AI技能", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_12b05708386ad2ae24227c12e7b0e70a", "tags": [], "update_time": ""}, {"id": 157, "title": "CLIProxyAPI 教程：零成本畅玩 GPT-5.4、Qwen-3.6 Plus 等顶级大模型", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_79fe4d7eec732a08d63262b5da40401f", "tags": ["GPT", "Qwen", "大模型", "模型", "CLIProxyAPI"], "update_time": ""}, {"id": 158, "title": "帮你节省 65% 的 token，这个 GitHub 项目让 Claude 模仿原始人。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5341de7b54f8f6b4bfa3dadb18825b09", "tags": ["Claude", "GitHub", "Token"], "update_time": ""}, {"id": 159, "title": "我的一人公司创业，没有员工，靠这16个Skill", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a5f1a08fd4b7909bfe8bfd3bef255c9d", "tags": [], "update_time": ""}, {"id": 160, "title": "这个一句话出架构图的Skill，能撑起一篇文章的门面（附教程）", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_164ca7632ef070622015820bef4670f7", "tags": [], "update_time": ""}, {"id": 161, "title": "一篇文章卖了20万，开源CC+Obsidian打造的LLM Wiki 内容创作3.0系统", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_488144fa0b8ea250c86243d64e007584", "tags": ["LLM", "开源", "Wiki"], "update_time": ""}, {"id": 162, "title": "这个 GitHub 项目 23.6k 星，让我实现了 token 自由", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_64b06e9c0eeb531cb5c6c54012b9490a", "tags": ["GitHub", "Token"], "update_time": ""}, {"id": 163, "title": "这个 Skill 太狠了：17种PPT风格，一句话就能做出来！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_bcb6b2b3279ea78e0001e7707c8d1e16", "tags": ["Skill"], "update_time": ""}, {"id": 164, "title": "一文看懂：Hermes Agent 与 OpenClaw 全维度对比", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_01d6eae6d7a0baa6b91e7bc5894066d6", "tags": ["Agent", "Hermes", "OpenClaw"], "update_time": ""}, {"id": 165, "title": "OpenClaw 多 Agent 部署操作指南", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0e72b5532a7bd6e0f23f95aba0531144", "tags": ["Agent", "部署操作", "OpenClaw"], "update_time": ""}, {"id": 166, "title": "日嫖1000次！Qwen3.6反代API接入任意工具", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fdf16f95dc334d3b5c7c95e80ea5ac07", "tags": ["Qwen", "Qwen3"], "update_time": ""}, {"id": 167, "title": "Superpowers + gstack 搭配实战：2 个插件，37 个技能，5 个关键交接点，闭环标准开发流程", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fadf1094a329c6c9a9a2d4b349cc606b", "tags": ["Superpowers", "gstack"], "update_time": ""}, {"id": 168, "title": "OpenClaw已死？别急着盖棺，但我确实被 Hermes 圈粉了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_127ed2a8aa5edfdf1e9d6e157cbf19a5", "tags": ["Hermes"], "update_time": ""}, {"id": 169, "title": "Sub2Api 中转站进阶优化：Upstash Redis 迁移到本地方案", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_457786b10b290aba66b0e8a441e2dda3", "tags": ["Sub2Api", "Upstash", "Redis"], "update_time": ""}, {"id": 170, "title": "一篇教你从0搭建中转站！超高性价比 token 自由，爽用 GPT-5.4", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_73a6041a0623f5217b68efc7669a3658", "tags": ["GPT", "Token"], "update_time": ""}, {"id": 171, "title": "我做了一个精美 PDF 排版 Skill，以生成 100+ 页 Claude Code 系统报告为例", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d03a3fb9cd6b6dd9c935470af022d616", "tags": ["Claude", "以生成", "PDF", "Skill", "Code"], "update_time": ""}, {"id": 172, "title": "全家共养一只虾：多人微信接入 OpenClaw教程", "category": "AI 应用 & 工具", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5dd304161529da343680a85c89e7c245", "tags": [], "update_time": ""}, {"id": 173, "title": "刚刚，MiniMax 正式发布 Music 2.6，我们魔改了一套 Skill", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_527b695c2a8d9ee69163a4e01b8fc9fa", "tags": ["MiniMax", "Music", "Skill"], "update_time": ""}, {"id": 174, "title": "从选题到发布全链路，花叔的20个AI创作Skills全拆解（附教程）", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_85167fdb1190e331bcf4d8e2f5c4286e", "tags": [], "update_time": ""}, {"id": 175, "title": "全网最全 28 个 OpenRouter 免费 AI 模型 API，无需信用卡", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_c5d6a2da484404eddb446ef189920dd8", "tags": ["模型", "OpenRouter", "API"], "update_time": ""}, {"id": 176, "title": "3000字讲透Token的计算、扣费与省流秘诀（附PPT下载）", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_30411df82d9729c62da9ca02b496dc01", "tags": ["Token"], "update_time": ""}, {"id": 177, "title": "GitHub 已被各类Agent霸榜，今天挑选5个高star Agent", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_49e38c73c512b84b45d2ed6ae0476af0", "tags": ["Agent", "GitHub"], "update_time": ""}, {"id": 178, "title": "44K人收藏！Karpathy 公开 AI 知识库搭建全流程，3 个文件夹就够了", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_deaf084fe452b6aa5299901e5bb2ca21", "tags": ["Karpathy"], "update_time": ""}, {"id": 179, "title": "AI 语音赛道的角逐，可能已经结束了。", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_632007b3f7e9c084d387e2c8f13c65d6", "tags": ["语音赛道"], "update_time": ""}, {"id": 180, "title": "AI圈我很服气的藏师傅的所有skill（开源）", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2a2be0b1bb409887d3b30d0e66cf8568", "tags": ["开源"], "update_time": ""}, {"id": 181, "title": "我开源了一款 Prompt 和 Skill 管理器", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7962e0a9fca63d9bf903502935a5ce33", "tags": ["Prompt", "开源", "Skill"], "update_time": ""}, {"id": 182, "title": "无限banana生图和AI短剧漫剧制作的flow项目部署保姆级教程！工具给到你，就看你怎么创业了。免费的顶级AI模型白嫖调用！", "category": "AI 创作 & 生成", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9220b22167278bf2cfc245025eeb70a4", "tags": ["项目部署", "模型白嫖"], "update_time": ""}, {"id": 183, "title": "Karpathy 亲手终结了RAG的草莽时代", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_46326ae7c6be10864ad4bdaa66a79914", "tags": ["RAG", "Karpathy"], "update_time": ""}, {"id": 184, "title": "整理一下藏师傅开源的所有 SkillsClaude-to-IM-skill：1800🌟安装后可以将你的 Claude Code 和 Codex 连接到任何聊天软件，实现远程控制https://github.com/op7418/Claude-to-IM-skillVideo-Wrapper-Skills：200🌟自动为你的视频添加类似“小Lin说”那样的解释特效，支持高亮卡片、关键词卡片、作者介绍、社交媒体卡片等多种组件https://github.com/op7418/Video-Wrapper-SkillsYoutube-clipper-skill：1700🌟帮你从 YouTube 下载长视频，并在分析视频后给出“长剪短”的方案，同时会自动添加中英双语字幕。https://github.com/op7418/Youtube-clipper-skillDocument-illustrator-skill：300🌟自动分析文档并生成配图，支持 16:9 和 4:3 比例。它会按照你的分段生成多张配图，并支持多种风格选择。我常用的封面图就是用这个生成的。https://github.com/op7418/Document-illustrator-skillHumanizer-zh：5600🌟去除 AI 生成文档中常见的“AI 味”表述，采用两段式处理，帮你提升 AI 生成内容的观感。https://github.com/op7418/Humanizer-zhNanoBanana-PPT-Skills：2100🌟基于 AI 自动生成高质量 PPT 图片和视频的强大工具，支持智能转场和交互式播放，带有非常顺滑的转场动效。https://github.com/op7418/NanoBanana-PPT-Skills", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7f4a0be7da818d309c0f99bcdd7e31b0", "tags": ["Claude", "GitHub", "开源", "的视频添", "并在分析"], "update_time": ""}, {"id": 185, "title": "我开发了一个「吃掉」别人Skill来升级的饕餮.Skill，现在免费开源", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_eb7ff4dc1526887851258dc340af2af7", "tags": ["开源", "Skill"], "update_time": ""}, {"id": 186, "title": "别再把 Skill 当插件用了，这 18 个最值得装的 Skills 我帮你筛完了", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8721cda0b70211acf97cf97bb8bc0038", "tags": ["Skill", "Skills"], "update_time": ""}, {"id": 187, "title": "0门槛AI短剧创作：Flow2API一键部署，让你的AI无限免费使用Banana进行图片创作和短剧制作", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0b63988a1ac576788b7d1379341b51a8", "tags": ["一键部署"], "update_time": ""}, {"id": 188, "title": "零成本AI解决方案！Flow2API把Google Flow免费额度转标准API，5分钟搞定，生图生视频全支持，无水印无限用", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0c4b3e8809d91985fd4a7c4011fbc6dc", "tags": ["Google"], "update_time": ""}, {"id": 189, "title": "Prompt之神李继刚开源了他的AI技能库：11个认知工具，国内平台直接用", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1315566f7414be387f911b16ea2a68b7", "tags": ["Prompt", "开源"], "update_time": ""}, {"id": 190, "title": "OpenClaw零成本搞设计！免费Banana生图Skill进化版上线，支持图生图和0水印，新手秒变设计师，领取口令在文末", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_43707716abc9b1cd6f4331f3adf47a07", "tags": [], "update_time": ""}, {"id": 191, "title": "SOLO：打工人终于等到一个不用学就能用的 AI 了", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5e2555e777ac4dc11824b20b77ae2108", "tags": ["SOLO"], "update_time": ""}, {"id": 192, "title": "如何用好 AI？少一点控制，多一些信任", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_c1b1abb5492c2450402d8a727d6f0822", "tags": [], "update_time": ""}, {"id": 193, "title": "绝配！免费的Qwen3.6Plus接入阿里CoPaw！", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7e208f5bb42673521cd4b1206956350a", "tags": ["Qwen"], "update_time": ""}, {"id": 194, "title": "一个被严重低估的原生 OpenClaw 工具，免费！", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d5edbcfc2e8d6635a232b8b5167dba0d", "tags": ["OpenClaw"], "update_time": ""}, {"id": 195, "title": "美团每天白送5500万token！OpenClaw用户专属接入教程和配置", "category": "AI 商业 & 趋势", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_bf8d692d6700c795333c0bb5460260b1", "tags": ["Token"], "update_time": ""}, {"id": 196, "title": "我把ClaudeCode源码里学到的都做成Skill！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7329206f5f8743de109bb4faa1b57e73", "tags": ["Claude"], "update_time": ""}, {"id": 197, "title": "Claude源码泄露，我们开发了全球首个专为学习Claude源码的网站Claudeleakage", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b5a4716cf0c92492d78480ee8db8ad9b", "tags": ["Claude"], "update_time": ""}, {"id": 198, "title": "白嫖 Qwen3.6 Plus 的四种方式！", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_002db1b21a7ff5d50e3305a262f1c485", "tags": ["Qwen", "Qwen3", "Plus"], "update_time": ""}, {"id": 199, "title": "零 API，无限次、100% 隐私!Claude Code 终于能本地免费跑起来了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_ce378f73698c8ba7d8233d2a66e5e72b", "tags": ["Claude", "API", "Code"], "update_time": ""}, {"id": 200, "title": "以前你用 Flowith，现在是 Agent 用 Flowith", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_492861486ec045644fb78a0aba6feecc", "tags": ["Agent", "Flowith"], "update_time": ""}, {"id": 201, "title": "Claude Code 源码泄露：5 个 Agent 设计模式拆解，全网首发！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9e7ec025dce9257db2815869c0e9c1fa", "tags": ["Agent", "Claude", "Code"], "update_time": ""}, {"id": 202, "title": "这款神级 Skill 彻底杀疯，公众号/飞书/推文通杀！任何 URL 都能转成 Markdown", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e1b4edd52d2b0fd2084411374fe09143", "tags": ["Skill", "URL", "Markdown"], "update_time": ""}, {"id": 203, "title": "让 OpenClaw 更好用，这个开源插件有点猛...", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2a40f77f567b97c016c3b90ea81690fd", "tags": ["开源", "OpenClaw"], "update_time": ""}, {"id": 204, "title": "万字拆解：“prompt之神”李继刚的13个skills ！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0161561169b6101dbb7b5c4a2d0ed865", "tags": ["Prompt"], "update_time": ""}, {"id": 205, "title": "用 OpenClaw 搭建「多 Agent 协作系统」：架构介绍 + Obsidian 联动", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_bd257af673f403a1675f21788948874d", "tags": ["Agent", "OpenClaw", "Obsidian"], "update_time": ""}, {"id": 206, "title": "终于找到免费的本地Agent了！量大管饱，真干活～", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_840b790d1acbf1c2df7d4c5c071e478b", "tags": ["Agent"], "update_time": ""}, {"id": 207, "title": "openclaw零成本玩转 AI 生图：Google Gemini 免费版 Nano Banana 生图 Skill", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_53f5dd82fa3106ae800a6e4f0d233639", "tags": ["Gemini", "Google", "Nano", "Banana", "Skill"], "update_time": ""}, {"id": 208, "title": "还在为生图API付费吗？这个Skill让OpenClaw用户彻底免费", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f9b05f91b024950cfa437db046f8b4f6", "tags": [], "update_time": ""}, {"id": 209, "title": "坏孩子浏览器来了！让AI直接用你的账号上网，好用到爆！", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2d281d795e18f980e86a92b07a4fdb0c", "tags": [], "update_time": ""}, {"id": 210, "title": "给AI插上“U盘”：别再死磕提示词了，Agent Skills 时代已来！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d7e6894da5237b40650ce1cc3038a316", "tags": ["Agent", "Skills"], "update_time": ""}, {"id": 211, "title": "9k星星！知名特效团队开源「完美AI绿幕抠像工具」，8G显存的老Mac都能跑", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_963d0d472fc3edee4820fc8e645bb34b", "tags": ["开源"], "update_time": ""}, {"id": 212, "title": "所有觉得 OpenClaw 没场景的朋友，都应该看下这个产品。", "category": "AI 商业 & 趋势", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5d357426b5f195a5a34117ace885189c", "tags": ["OpenClaw"], "update_time": ""}, {"id": 213, "title": "永久免费！OpenClaw 提取网页的终极方案实测，Jina、Scrapling、web_fetch 谁更强？", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9fdbdce7f23ea3e20a53cf762dac63ff", "tags": ["OpenClaw", "Jina", "Scrapling"], "update_time": ""}, {"id": 214, "title": "用WorkBuddy养出你的龙虾搭子！【附提示词】", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1b042ecb250a51d1229b4f6844ce2540", "tags": [], "update_time": ""}, {"id": 215, "title": "字节版龙虾架构火爆GitHub！开源获35k+ Star，内置Skill全家桶，原生适配飞书", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f3e67443856416b80278503061e15424", "tags": ["GitHub", "开源", "Star"], "update_time": ""}, {"id": 216, "title": "最近的AI信息焦虑，被阿里Agent团队治好了（附赠工具）", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3640a0d1dd81295f6a9d8457363516f0", "tags": ["Agent"], "update_time": ""}, {"id": 217, "title": "从画画转行到 AI产品经理，我把方法拆成了四层", "category": "AI 商业 & 趋势", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_08d63a647889d5094d27487c868b82f2", "tags": [], "update_time": ""}, {"id": 218, "title": "OpenClaw 与 Agent 的未来-Bojie Li", "category": "AI Agent & 工作流", "media_id": "weburl_c1388728e3a0446262d14db6e16c9be6_51fa210d11ce71663c0166b6874d656e", "tags": ["Agent", "OpenClaw", "Bojie"], "update_time": ""}, {"id": 219, "title": "我们用 MiniMax M2.7 改造了「十字路口」的整套内容工作流", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2272d0cbd7783c8d3f427f2eaabae457", "tags": ["MiniMax"], "update_time": ""}, {"id": 220, "title": "GitHub 悄悄起飞的开源项目，想让 AI 接管你的电脑", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_142d25d3caffb135d6b62ecc0185be7c", "tags": ["GitHub", "开源"], "update_time": ""}, {"id": 221, "title": "实测AI浏览器Tabbit一周后，这就是我OpenClaw的新最佳拍档！", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_cda926d4e6fc69ebc83ce740474b1fd4", "tags": [], "update_time": ""}, {"id": 222, "title": "清华团队王炸开源，解锁OpenClaw新姿势！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d01cf0fe0d05cd1ddb8b8c88317ef33b", "tags": ["开源"], "update_time": ""}, {"id": 223, "title": "全球首款龙虾模型上线！Agent这波直接起飞了～（夹带干货）", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_15ed7d32dc373476d24221f082d2daed", "tags": ["Agent", "龙虾模型"], "update_time": ""}, {"id": 224, "title": "一夜暴涨1万星！GitHub神级开源：直接“白嫖”一家拥有55名顶尖专家的AI公司？", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fcd7c70d110d8755dbea119ff6eceb10", "tags": ["GitHub", "开源"], "update_time": ""}, {"id": 225, "title": "我用大厂PUA话术调教AI，打了3.25后它再也不敢摸鱼了", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_25919dc0c34752498a599f42e781ec7d", "tags": [], "update_time": ""}, {"id": 226, "title": "首个国产OpenClaw硬件产品即将发布，插电脑上就能用，使用成本降低20倍。", "category": "AI 硬件 & 算力", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_eb7d83cff100974d0cd054302277a54f", "tags": [], "update_time": ""}, {"id": 227, "title": "扣子OpenClaw来了！1分钟部署并接入飞书！分享从顶层重塑人生的神级方案（你一定用得上）", "category": "AI 部署 & 运维", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_183c4b45b6d7683abf5b65de4a9ba91d", "tags": ["分钟部署"], "update_time": ""}, {"id": 228, "title": "告别命令行！这款桌面工具让 OpenClaw AI 代理操作如丝般顺滑", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_20ae14690a133996b8a9f995e5b66c20", "tags": ["OpenClaw"], "update_time": ""}, {"id": 229, "title": "你的OpenClaw会主动干活吗？这才是龙虾的王牌场景..", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2ed4a475e358b1b88e2f9013eb004ab7", "tags": [], "update_time": ""}, {"id": 230, "title": "上海一群青年，造了个学术版OpenClaw", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_af7c10efe27dc154991da2fa3973927d", "tags": [], "update_time": ""}, {"id": 231, "title": "这款自动化工具太牛了！可视化工作流，让手机自动完成重复任务", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_03f82c7bb73ebc4f2124fcc52dd3edf6", "tags": [], "update_time": ""}, {"id": 232, "title": "OpenClaw 再升级，OpenFang 重磅开源！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8970b664d900c1e4250d34630b8fab60", "tags": ["开源", "OpenClaw", "OpenFang"], "update_time": ""}, {"id": 233, "title": "MiniMax入局OpenClaw！给大家分享6种超实用的龙虾神级技巧（建议收藏）", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_c0d88a5e5a3d0b5c3b1f1ecb40595be5", "tags": [], "update_time": ""}, {"id": 234, "title": "99元/年！不翻墙不装App，用企业微信把AI塞进个人微信的终极方案", "category": "AI 应用 & 工具", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fec233ec5146a8fcd7516535d53b01d2", "tags": [], "update_time": ""}, {"id": 235, "title": "当 MiniMax 遇见 OpenClaw：「1 2 3 上链接」", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_73d81140bb6d81258a1e5d85b6b509e0", "tags": ["MiniMax", "OpenClaw"], "update_time": ""}, {"id": 236, "title": "Kimi 版 OpenClaw 来了，5000+ Skills 随便用，确实给力！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f7f0692c0fba385561a13a5416678f55", "tags": ["Kimi", "OpenClaw", "Skills"], "update_time": ""}, {"id": 237, "title": "MiniMax又又来吃龙虾肉了！OpenClaw真·一键部署，还有上万专家智能体等你差遣", "category": "AI 部署 & 运维", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1f09af605f5d939511d941c10d2fd7f9", "tags": ["一键部署", "专家智能"], "update_time": ""}, {"id": 238, "title": "Notion创始人：不能被Agent使用的产品，必死无疑。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1a4221a3d5cf3991c2bfed249d66c7cb", "tags": ["Agent"], "update_time": ""}, {"id": 239, "title": "用 YouMind Skills 打造你的内容系统，实现稳定日更涨粉", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_04f4ad6066ed305bd4eecb7be072b0dc", "tags": ["YouMind", "Skills"], "update_time": ""}, {"id": 240, "title": "AI 生成的网站 AI 运营，流量比我做的还好", "category": "AI 应用 & 工具", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_2b04eb7148b8417a004242417327124a", "tags": ["生成的网"], "update_time": ""}, {"id": 241, "title": "Kimi春节档挣超一年钱！这口“龙虾肉”大厂开始抢吃了", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_637f0e3bee9e8f1bdd429d05a4fb9309", "tags": ["Kimi"], "update_time": ""}, {"id": 242, "title": "Taalas用做矿机的思路做AI芯,首代17000tokens/s,AI硬件的“Transformer时刻”;潘多拉魔盒已打开,近代AI芯片架构最大创新;附demo可体验", "category": "AI 部署 & 运维", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_018174fdb58d75c5f89659abab6b1806", "tags": ["Transformer", "Token", "芯片架构"], "update_time": ""}, {"id": 243, "title": "Google 悄悄开源了一个「数据提取神器」，3 行代码干掉你 500 行正则", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_7920d6d63d8a793441d3223eb331cdc1", "tags": ["Google", "开源", "数据提取"], "update_time": ""}, {"id": 244, "title": "皮皮虾也来了！超低成本超高效版OpenClaw", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5d6d1bf5275aad892968428cec8212bf", "tags": [], "update_time": ""}, {"id": 245, "title": "18岁OpenClaw版AI女友一夜爆红，全网60万围观！00后开发者一人造出", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6af20be2fe274d0e2999db9e01814ad6", "tags": [], "update_time": ""}, {"id": 246, "title": "超级 AI 大神强推的 92 个信息源，在 GitHub 上开源了。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1aac818f32d0f3ca39029937ffce383d", "tags": ["GitHub", "开源"], "update_time": ""}, {"id": 247, "title": "这个 AI 操纵手机的 GitHub 项目，支持 OpenClaw 干不了的活。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4b6f2d5af1206d47a47bd4d4e1e8d834", "tags": ["GitHub", "OpenClaw"], "update_time": ""}, {"id": 248, "title": "手机放桌上，自动刷抖音？这个国产开源 Agent 比 OpenClaw 还野！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_610cc6bc153da38c572ef87757ee58da", "tags": ["Agent", "开源", "OpenClaw"], "update_time": ""}, {"id": 249, "title": "GitHub 上狂揽 12 Star！把 Claude Code、Gemini CLI 等聚到了一起。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d76e5bd64f0899e997f2c17ef1182254", "tags": ["Claude", "Gemini", "GitHub", "Star", "Code"], "update_time": ""}, {"id": 250, "title": "52KB 的奇迹！NovaSR 开源：16kHz 秒变 48kHz，快出天际的音频超分模型！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_110b7f15a7924e6440a2abdd86faf5f6", "tags": ["开源", "分模型", "NovaSR"], "update_time": ""}, {"id": 251, "title": "Clawdbot国产芯片适配完成！清华特奖出手，开源框架直接一键部署", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_13e4bce7e293c1e7de364da861bcfd20", "tags": ["开源", "国产芯片", "开源框架", "部署"], "update_time": ""}, {"id": 252, "title": "15 万个 ClawdBot 涌进 AI 社交网站，但人类只能围观。", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_45ce53ef1f3725ca0d51466fc4f4b176", "tags": ["ClawdBot"], "update_time": ""}, {"id": 253, "title": "一文读懂Crawdbot Tokens消耗原因及应对策略", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0c7931f8cf5d4600eda4e70d3677bc6c", "tags": ["Token"], "update_time": ""}, {"id": 254, "title": "发现了 4 个好玩 SKills，已经在 GitHub 上开源了。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9ebf7729e6695fbc706257dc3a45c716", "tags": ["GitHub", "开源", "SKills"], "update_time": ""}, {"id": 255, "title": "GitHub Trending 榜一的开源 Cowork 来了！4天4.5K星，首个多智能体工作流应用！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f82602c66e1dc3c0af4e2b477f0362d1", "tags": ["GitHub", "开源", "Trending", "Cowork"], "update_time": ""}, {"id": 256, "title": "开源AI微信聊天记录管理分析工具，一键生成分析报告，功能太全面了！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fd9467d826d040d74b854d70f16de6bf", "tags": ["开源", "分析工具", "一键生成", "分析报告"], "update_time": ""}, {"id": 257, "title": "多次霸榜 GitHub，斩获 22700+ Star，又一个 Claude Code 神器开源！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_17e7b87c10541cf8ec6eec208c0e603a", "tags": ["Claude", "GitHub", "开源", "Star", "Code"], "update_time": ""}, {"id": 258, "title": "AI 智能体模拟平行世界 推演未来，这个 GitHub 项目有意思。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a21c45d7404716137d73d9d6ee8bf279", "tags": ["GitHub", "智能体模"], "update_time": ""}, {"id": 259, "title": "开源 3 天就 7000 Star！这个复刻 Manus 工作流的 GitHub 项目火了。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a33091bc65bbbfd0b72e82e526325bd5", "tags": ["GitHub", "开源", "Star", "Manus"], "update_time": ""}, {"id": 260, "title": "Obsidian CEO 亲自下场！开源 obsidian-skills，4 天狂揽 4.6K Star！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fda5533c6aeff5b208c11bf0b9cb1887", "tags": ["开源", "Obsidian", "CEO", "skills", "Star"], "update_time": ""}, {"id": 261, "title": "GitHub 上 2300 人 Star 的 Claude Code 可视化工作流编辑器。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_33b78d3b85c49b384c52bd0b5ece01e8", "tags": ["Claude", "GitHub", "Star", "Code"], "update_time": ""}, {"id": 262, "title": "Claude Code新手入门，官方指引！", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_046864dbc1fdb7505710a9ccc0896ffb", "tags": ["Claude"], "update_time": ""}, {"id": 263, "title": "OpenCode 感觉比 Claude Code 更易用啊，尤其是对我们用 Anthropic 账号困难的人来说1️⃣API 接入简单方便，支持所有主流模型 API，甚至分了国内国外的 GLM、Kimi 和 MiniMax，都不需要自己找链接2️⃣还有可视化的客户端可以安装，没有 CLI 那么麻烦，就当个软件装就行。3️⃣支持 Cluade Code 的所有能力，创建 Skills 等，甚至可以直接调用 CC 创建的 Skills甚至允许你调用你 Claude 账号本身的模型额度，当然我授权之后不知道为啥老是 403，可能是网络问题这里尝试：opencode.ai", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_81a11caad2a34a6579ef827c2677c5b8", "tags": ["Claude", "Anthropic", "Kimi", "主流模型", "的模型额"], "update_time": ""}, {"id": 264, "title": "深度集成 Gemini ！Gemini Nexus 爆火：这才是真正的“原生 AI 浏览器”该有的样子", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_1263f6d03180985fd34a1687f84bbdd1", "tags": ["Gemini", "Nexus"], "update_time": ""}, {"id": 265, "title": "今日超300万人阅读：Claude Code 创始人的 13 个高效使用技巧", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_23c65c8c5a337066ab5b92862c0324e3", "tags": ["Claude", "Code"], "update_time": ""}, {"id": 266, "title": "免费自动化神器！GitHub Workflows定时执行脚本任务，效率翻倍！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f225812853277f6611c2ced443e1406b", "tags": ["Workflow", "GitHub"], "update_time": ""}, {"id": 267, "title": "2025 年 11 个神级 AI 开源平替，GitHub 杀疯了。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_4441d87eb7733855236ac4cf9fd6e35d", "tags": ["GitHub", "开源"], "update_time": ""}, {"id": 268, "title": "一键生成出海营销数字人！GLM-4.7+Claude Code可以封神了～", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e20bea8f52abb32271a977e6fef62658", "tags": ["Claude", "一键生成", "GLM"], "update_time": ""}, {"id": 269, "title": "Google 神级生产力工具，所有 GitHub 开源平替都找到了。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_a2670f039be6da438a8d2ea8b31530d6", "tags": ["Google", "GitHub", "开源"], "update_time": ""}, {"id": 270, "title": "推荐 5 个 yyds 的 AI 开源项目，给劲儿啊。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_69796d4f18e39e8a6972981a98802b84", "tags": ["开源", "推荐", "yyds"], "update_time": ""}, {"id": 271, "title": "GitHub 上的 3 个 AI 信息差利器，太绝了啊。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_c84f22c1a887a329180d9d27c36398bf", "tags": ["GitHub"], "update_time": ""}, {"id": 272, "title": "告别每月 AI 订阅费！这款开源笔记内置 Ollama，让你的电脑变身第二大脑", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d9296f751c291bacac8018aca91366b1", "tags": ["Llama", "开源", "Ollama"], "update_time": ""}, {"id": 273, "title": "小皮AI直播机器人", "category": "AI 应用 & 工具", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_9ef399a95f7a1c340bb095ce20e2b018", "tags": [], "update_time": ""}, {"id": 274, "title": "AutoGLM+Gemini3 Flash 玩手机太6了！（附懒人安装教程）丝滑流畅～", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_6b357bb4d78e50f86c41dfd090462df6", "tags": ["Gemini", "AutoGLM+Gemini3", "Flash"], "update_time": ""}, {"id": 275, "title": "面对算力瓶颈，以软补硬，动态解码，破局AI基础设施结构性矛盾", "category": "AI 部署 & 运维", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d96f988209f0204c3c7e030a2a7e6572", "tags": ["面对算力"], "update_time": ""}, {"id": 276, "title": "搜罗了 4 个超炫酷的 AI 开源项目，速速收藏。", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0731315e9fbaa649c14ad725546826fa", "tags": ["开源"], "update_time": ""}, {"id": 277, "title": "附邀请码｜智谱AI输入法发布，不能再丝滑了！", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_69604eda914da93af4ff31c263422759", "tags": [], "update_time": ""}, {"id": 278, "title": "智谱刚刚把AutoGLM开源了！手机操作迎来全自动化智能操作时代！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_994b2fe97c9d10f70e6d7232c7398ed0", "tags": ["开源", "动化智能"], "update_time": ""}, {"id": 279, "title": "建议去 GitHub 学这 6 个项目，打破 Agent 的信息差。", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f19eea1a15ed925893456fdcaf655088", "tags": ["Agent", "GitHub"], "update_time": ""}, {"id": 280, "title": "Gemini3+飞书多维表格，批量扒抖音爆款&自动二创，太爽了！【喂饭级教程】", "category": "AI 模型 & 平台", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f8a8062b40137aad761e78bdcd6e8b31", "tags": ["Gemini", "Gemini3+"], "update_time": ""}, {"id": 281, "title": "大模型一体机应用研究报告(2025年)-中国信通院.202510.pdf", "category": "AI 资讯 & 其他", "media_id": "pdf_c1388728e3a0446262d14db6e16c9be6_dedf9ea14992ccfb1503a5c3bd049214001a02254d40217b", "tags": ["大模型", "大模型一", "pdf"], "update_time": ""}, {"id": 282, "title": "虚拟化向左，超节点向右：华为Flex:ai容器到底是什么？", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_f8eea886fc24ede250dec6e659cdcbf8", "tags": ["容器到底"], "update_time": ""}, {"id": 283, "title": "新品发布 | 网宿边缘AI实时语音交互方案", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_91ce40560a4a15b5f1ec910e0ef69a0d", "tags": ["实时语音"], "update_time": ""}, {"id": 284, "title": "AI时代开发者白皮书_知乎魔搭.pdf", "category": "AI 编程 & 开发", "media_id": "pdf_c1388728e3a0446262d14db6e16c9be6_c2430c25cb5f36e8ecefc5615511545f001a02254d40217b", "tags": ["pdf"], "update_time": ""}, {"id": 285, "title": "【终于搞懂了！】全网最细 NVIDIA GPU 讲解", "category": "AI 硬件 & 算力", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_fc9d70b006b59d2119b5d79a74c21694", "tags": ["NVIDIA", "GPU"], "update_time": ""}, {"id": 286, "title": "LangChain联合Manus季逸超最新分享！也许当前最好的「上下文工程」讲解", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_eb82dae99f9228d55d121f3702f8be1b", "tags": ["LangChain"], "update_time": ""}, {"id": 287, "title": "从ChatGPT到AI Agent，一文讲透 Agent 的底层逻辑", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_d6bf6be109f8b64afbc71da9ecddea3b", "tags": ["Agent", "GPT", "ChatGPT"], "update_time": ""}, {"id": 288, "title": "AI把运维干掉不是开玩笑，用AI试了试4小时搞定3天活", "category": "AI 部署 & 运维", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_b31c936b1480a162dcdd4eb45c7ae267", "tags": [], "update_time": ""}, {"id": 289, "title": "一个好算力项目的诞生：从选址、建机房到上客户，全流程解密", "category": "AI 硬件 & 算力", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_5b9bc6f7699f61abb5ad6ecf1fb17424", "tags": [], "update_time": ""}, {"id": 290, "title": "20250724-中信建投-人工智能行业：AI新纪元，砥砺开疆·智火燎原.pdf", "category": "AI 资讯 & 其他", "media_id": "pdf_c1388728e3a0446262d14db6e16c9be6_2ec3653b04035c1526319d2dbe0c71f5001a02254d40217b", "tags": ["人工智能", "pdf"], "update_time": ""}, {"id": 291, "title": "我做了一个大佬提示词库 PrompterHub，汇集中文 AI 优质提示词", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_8ea83cf3d2f7349e2d195fcaedc861c8", "tags": ["Prompt", "PrompterHub"], "update_time": ""}, {"id": 292, "title": "用自定义脚本，解锁RAGFlow中Word复杂表格的终极图文问答", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_00b769bcb586195dc70e989ea5ba49de", "tags": ["RAG"], "update_time": ""}, {"id": 293, "title": "PromptMuse：让你的提问，成为开启 AI 潜能的钥匙", "category": "AI 资讯 & 其他", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_90a892245d8f34ab9a20ca3bb275d43a", "tags": ["Prompt", "PromptMuse"], "update_time": ""}, {"id": 294, "title": "玩转大模型，你的GPU显存够用吗？一文看懂估算方法", "category": "AI 硬件 & 算力", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_bf1d4ae3fd3e2470a42b5a8a3eda13e4", "tags": ["大模型", "GPU"], "update_time": ""}, {"id": 295, "title": "葵花宝典之「知识库」调优秘籍！RAG优化指南！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_e5b278ebd32e988b9991391dfabe17fb", "tags": ["RAG"], "update_time": ""}, {"id": 296, "title": "草履虫看了都直呼简单！用MCP让你的Dify一飞冲天！", "category": "AI Agent & 工作流", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_0e1d626a521edb469a23011ba674c4d2", "tags": ["MCP"], "update_time": ""}, {"id": 297, "title": "打造自己的知识库，自用Obsidian插件推荐，量大管饱，开源免费！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_99eeae63666e3d8be48807da0f8d05ad", "tags": ["开源", "插件推荐"], "update_time": ""}, {"id": 298, "title": "再见收藏夹！一款高效的开源微信公众号订阅工具，支持RSS，API导入！", "category": "AI 编程 & 开发", "media_id": "wechatarticle_c1388728e3a0446262d14db6e16c9be6_3afba2e55d90105248d23fd9d2d634c1", "tags": ["开源"], "update_time": ""}, {"id": 299, "title": "4 【小白5分钟教程】本地速搭Qwen2.5-VL多模态视觉模型", "category": "AI 部署 & 运维", "media_id": "weburl_c1388728e3a0446262d14db6e16c9be6_8a8fc280269901c2733a53de159d7535", "tags": ["Qwen", "多模态", "觉模型"], "update_time": ""}, {"id": 300, "title": "GitHub - x1xhlol/system-prompts-and-models-of-ai-tools: FULL v0, Cursor, Manus, Same.dev & Lovable System Prompts & AI Models.", "category": "AI 编程 & 开发", "media_id": "weburl_c1388728e3a0446262d14db6e16c9be6_58c322f57d69344381596a9f6d4b9bc4", "tags": ["Prompt", "Cursor", "GitHub", "System Prompt", "x1xhlol"], "update_time": ""}];
-const CAT_COLORS = {"AI Agent & 工作流": "#22C55E", "AI 编程 & 开发": "#3B82F6", "AI 资讯 & 其他": "#A78BFA", "AI 模型 & 平台": "#F59E0B", "AI 部署 & 运维": "#EC4899", "AI 应用 & 工具": "#14B8A6", "AI 硬件 & 算力": "#F97316", "AI 商业 & 趋势": "#EF4444", "AI 创作 & 生成": "#8B5CF6"};
-const CHART_LABELS = ["W10", "W11", "W12", "W13", "W14", "W15", "W16", "W17", "W18", "W19", "W20", "W21"];
-const CHART_DATASETS = [{"label": "Agent/工作流", "data": [13, 8, 12, 12, 13, 15, 14, 11, 13, 5, 7, 5], "borderColor": "#22C55E", "backgroundColor": "#22C55E20", "borderWidth": 2, "pointRadius": 4, "pointBackgroundColor": "#22C55E", "tension": 0.3, "fill": false}, {"label": "编程/开发", "data": [11, 9, 5, 6, 7, 3, 8, 4, 5, 7, 9, 6], "borderColor": "#3B82F6", "backgroundColor": "#3B82F620", "borderWidth": 2, "pointRadius": 4, "pointBackgroundColor": "#3B82F6", "tension": 0.3, "fill": false}, {"label": "资讯/其他", "data": [0, 4, 5, 3, 2, 4, 1, 6, 5, 6, 2, 8], "borderColor": "#A78BFA", "backgroundColor": "#A78BFA20", "borderWidth": 2, "pointRadius": 4, "pointBackgroundColor": "#A78BFA", "tension": 0.3, "fill": false}, {"label": "模型/平台", "data": [0, 2, 2, 4, 2, 3, 1, 2, 0, 1, 5, 1], "borderColor": "#F59E0B", "backgroundColor": "#F59E0B20", "borderWidth": 2, "pointRadius": 4, "pointBackgroundColor": "#F59E0B", "tension": 0.3, "fill": false}, {"label": "部署/运维", "data": [1, 0, 0, 0, 0, 0, 0, 0, 0, 3, 1, 2], "borderColor": "#EC4899", "backgroundColor": "#EC489920", "borderWidth": 2, "pointRadius": 4, "pointBackgroundColor": "#EC4899", "tension": 0.3, "fill": false}];
-
-const PAGE_SIZE = 30;
-let currentPage = 1;
-let currentCat = 'all';
-let searchQuery = '';
-
-function getCatColor(cat) { return CAT_COLORS[cat] || '#22C55E'; }
-
-function getFiltered() {
-  return ARTICLES.filter(a => {
-    const catMatch = currentCat === 'all' || a.category === currentCat;
-    const searchMatch = !searchQuery || a.title.toLowerCase().includes(searchQuery.toLowerCase());
-    return catMatch && searchMatch;
-  });
-}
-
-function renderTagChips(tags) {
-  if (!tags || tags.length === 0) return '';
-  return '<div class="article-tags">' +
-    tags.map(t => '<span class="tag-chip">' + t + '</span>').join('') +
-    '</div>';
-}
-
-function render() {
-  const filtered = getFiltered();
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  if (currentPage > totalPages) currentPage = 1;
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(start, start + PAGE_SIZE);
-  const grid = document.getElementById('articlesGrid');
-
-  if (pageItems.length === 0) {
-    grid.innerHTML = '<div class="empty-state">// NO ARTICLES FOUND<br><br>尝试其他关键词或分类</div>';
-  } else {
-    grid.innerHTML = pageItems.map(a => {
-      const color = getCatColor(a.category);
-      const shortCat = a.category.replace('AI ', '').replace(' & ', '/');
-      const idx = String(a.id).padStart(3, '0');
-      const timeHtml = a.update_time ? '<span class="article-time">' + a.update_time + '</span>' : '';
-      return '<div class="article-card" style="--cat-color:'+color+'">' +
-        '<div class="article-cat-tag">'+shortCat+'</div>' +
-        '<div class="article-title">'+a.title+'</div>' +
-        renderTagChips(a.tags) +
-        '<div class="article-meta">' +
-          '<span class="article-id">#'+idx+'</span>' +
-          timeHtml +
-        '</div>' +
-      '</div>';
-    }).join('');
-  }
-
-  const pag = document.getElementById('pagination');
-  if (totalPages <= 1) { pag.style.display = 'none'; return; }
-  pag.style.display = 'flex';
-  let h = '<span class="page-info">共 '+filtered.length+' 篇 · 第 '+currentPage+'/'+totalPages+' 页</span>';
-  h += '<button class="page-btn" onclick="goPage('+(currentPage-1)+')" '+(currentPage===1?'disabled':'')+'>&lt; PREV</button>';
-  for (let p = Math.max(1,currentPage-2); p <= Math.min(totalPages,currentPage+2); p++) {
-    h += '<button class="page-btn '+(p===currentPage?'active':'')+'" onclick="goPage('+p+')">'+p+'</button>';
-  }
-  h += '<button class="page-btn" onclick="goPage('+(currentPage+1)+')" '+(currentPage===totalPages?'disabled':'')+'>NEXT &gt;</button>';
-  pag.innerHTML = h;
-}
-
-function goPage(p) {
-  const filtered = getFiltered();
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  if (p < 1 || p > totalPages) return;
-  currentPage = p;
-  render();
-  document.getElementById('articlesGrid').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentCat = btn.dataset.cat;
-    currentPage = 1;
-    render();
-  });
-});
-
-document.getElementById('searchInput').addEventListener('input', e => {
-  searchQuery = e.target.value;
-  currentPage = 1;
-  render();
-});
-
-// ── Chart.js Trend Chart ──
-(function initChart() {
-  const ctx = document.getElementById('trendChart');
-  if (!ctx || CHART_LABELS.length === 0) return;
-
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: CHART_LABELS,
-      datasets: CHART_DATASETS,
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: {
-        mode: 'index',
-        intersect: false,
-      },
-      plugins: {
-        legend: {
-          position: 'top',
-          labels: {
-            color: '#8b949e',
-            font: { family: "'JetBrains Mono', monospace", size: 10 },
-            padding: 16,
-            usePointStyle: true,
-            pointStyleWidth: 8,
-          },
-        },
-        tooltip: {
-          backgroundColor: '#0d1117',
-          titleColor: '#f0f6fc',
-          bodyColor: '#8b949e',
-          borderColor: '#1e2a3a',
-          borderWidth: 1,
-          titleFont: { family: "'JetBrains Mono', monospace", size: 11 },
-          bodyFont: { family: "'JetBrains Mono', monospace", size: 10 },
-          padding: 10,
-          cornerRadius: 4,
-        },
-      },
-      scales: {
-        x: {
-          grid: {
-            color: '#1e2a3a',
-            drawBorder: false,
-          },
-          ticks: {
-            color: '#4a5568',
-            font: { family: "'JetBrains Mono', monospace", size: 10 },
-          },
-        },
-        y: {
-          grid: {
-            color: '#1e2a3a',
-            drawBorder: false,
-          },
-          ticks: {
-            color: '#4a5568',
-            font: { family: "'JetBrains Mono', monospace", size: 10 },
-            stepSize: 1,
-          },
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-})();
-
-render();
-</script>
 </body>
 </html>
