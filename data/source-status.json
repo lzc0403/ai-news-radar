@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-08-13T16:00:35.018527Z",
+  "generated_at": "2026-08-13T17:29:13.694918Z",
   "sites": [
     {
       "site_id": "official_ai",
       "site_name": "Official AI Updates",
       "ok": true,
-      "item_count": 173,
-      "duration_ms": 2918,
+      "item_count": 179,
+      "duration_ms": 2941,
       "error": null
     },
     {
@@ -14,7 +14,7 @@
       "site_name": "AI Breakfast",
       "ok": false,
       "item_count": 0,
-      "duration_ms": 36,
+      "duration_ms": 172,
       "error": "403 Client Error: Forbidden for url: https://r.jina.ai/https://aibreakfast.beehiiv.com/"
     },
     {
@@ -30,7 +30,7 @@
       "site_name": "TechURLs",
       "ok": true,
       "item_count": 405,
-      "duration_ms": 498,
+      "duration_ms": 501,
       "error": null
     },
     {
@@ -38,15 +38,15 @@
       "site_name": "Buzzing",
       "ok": true,
       "item_count": 744,
-      "duration_ms": 293,
+      "duration_ms": 458,
       "error": null
     },
     {
       "site_id": "iris",
       "site_name": "Info Flow",
       "ok": true,
-      "item_count": 436,
-      "duration_ms": 16865,
+      "item_count": 326,
+      "duration_ms": 12004,
       "error": null
     },
     {
@@ -54,23 +54,23 @@
       "site_name": "BestBlogs",
       "ok": true,
       "item_count": 1,
-      "duration_ms": 1129,
+      "duration_ms": 1314,
       "error": null
     },
     {
       "site_id": "tophub",
       "site_name": "TopHub",
       "ok": true,
-      "item_count": 3030,
-      "duration_ms": 1337,
+      "item_count": 3023,
+      "duration_ms": 1307,
       "error": null
     },
     {
       "site_id": "zeli",
       "site_name": "Zeli",
       "ok": true,
-      "item_count": 66,
-      "duration_ms": 741,
+      "item_count": 65,
+      "duration_ms": 712,
       "error": null
     },
     {
@@ -78,7 +78,7 @@
       "site_name": "AI HubToday",
       "ok": false,
       "item_count": 0,
-      "duration_ms": 5031,
+      "duration_ms": 5145,
       "error": "HTTPSConnectionPool(host='ai.hubtoday.app', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='ai.hubtoday.app', port=443): Failed to resolve 'ai.hubtoday.app' ([Errno -2] Name or service not known)\"))"
     },
     {
@@ -86,7 +86,7 @@
       "site_name": "AIbase",
       "ok": true,
       "item_count": 20,
-      "duration_ms": 1664,
+      "duration_ms": 1009,
       "error": null
     },
     {
@@ -94,52 +94,52 @@
       "site_name": "AI HOT",
       "ok": true,
       "item_count": 50,
-      "duration_ms": 932,
+      "duration_ms": 1268,
       "error": null
     },
     {
       "site_id": "newsnow",
       "site_name": "NewsNow",
-      "ok": false,
-      "item_count": 0,
-      "duration_ms": 29774,
-      "error": "HTTPSConnectionPool(host='newsnow.busiyi.world', port=443): Max retries exceeded with url: /api/s?id=36kr (Caused by ResponseError('too many 500 error responses'))"
+      "ok": true,
+      "item_count": 127,
+      "duration_ms": 1560,
+      "error": null
     },
     {
       "site_id": "opmlrss",
       "site_name": "OPML RSS",
       "ok": true,
-      "partial_failures": 2,
-      "item_count": 134,
-      "duration_ms": 7871,
-      "error": "2 feeds failed",
+      "partial_failures": 3,
+      "item_count": 124,
+      "duration_ms": 15605,
+      "error": "3 feeds failed",
       "feed_count": 10,
       "effective_feed_count": 8,
-      "ok_feed_count": 8,
-      "failed_feed_count": 2,
+      "ok_feed_count": 7,
+      "failed_feed_count": 3,
       "skipped_feed_count": 2,
       "replaced_feed_count": 1
     }
   ],
-  "successful_sites": 11,
+  "successful_sites": 12,
   "failed_sites": [
     "aibreakfast",
-    "aihubtoday",
-    "newsnow"
+    "aihubtoday"
   ],
   "zero_item_sites": [],
-  "fetched_raw_items": 5096,
-  "items_before_topic_filter": 7311,
-  "items_in_24h": 751,
+  "fetched_raw_items": 5101,
+  "items_before_topic_filter": 7592,
+  "items_in_24h": 749,
   "rss_opml": {
     "enabled": true,
     "path": "configured",
     "feed_total": 10,
     "effective_feed_total": 8,
-    "ok_feeds": 6,
+    "ok_feeds": 5,
     "failed_feeds": [
       "https://rsshub.app/v2ex/topics/hot",
-      "https://rsshub.app/dapenti/tugua"
+      "https://rsshub.app/dapenti/tugua",
+      "https://www.iwb88.cc/feed/"
     ],
     "zero_item_feeds": [],
     "skipped_feeds": [
@@ -167,7 +167,7 @@
         "effective_feed_url": "https://www.ginonotes.com/feed.xml",
         "ok": true,
         "item_count": 87,
-        "duration_ms": 198,
+        "duration_ms": 195,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -181,7 +181,7 @@
         "effective_feed_url": "https://rsshub.app/v2ex/topics/hot",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 99,
+        "duration_ms": 113,
         "error": "403 Client Error: Forbidden for url: https://rsshub.app/v2ex/topics/hot",
         "skipped": false,
         "skip_reason": null,
@@ -195,7 +195,7 @@
         "effective_feed_url": "https://cgw666.com/feed/",
         "ok": true,
         "item_count": 10,
-        "duration_ms": 1337,
+        "duration_ms": 1184,
         "error": null,
         "skipped": false,
         "skip_reason": null,
@@ -209,7 +209,7 @@
         "effective_feed_url": "https://rsshub.app/dapenti/tugua",
         "ok": false,
         "item_count": 0,
-        "duration_ms": 96,
+        "duration_ms": 108,
         "error": "403 Client Error: Forbidden for url: https://rsshub.app/dapenti/tugua",
         "skipped": false,
         "skip_reason": null,
@@ -249,10 +249,10 @@
         "feed_title": "爱玩中文站",
         "feed_url": "https://www.iwb88.cc/feed/",
         "effective_feed_url": "https://www.iwb88.cc/feed/",
-        "ok": true,
-        "item_count": 10,
-        "duration_ms": 4508,
-        "error": null,
+        "ok": false,
+        "item_count": 0,
+        "duration_ms": 12372,
+        "error": "HTTPSConnectionPool(host='www.iwb88.cc', port=443): Read timed out. (read timeout=12)",
         "skipped": false,
         "skip_reason": null,
         "replaced": false
